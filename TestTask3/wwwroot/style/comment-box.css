@@ -1,0 +1,7 @@
+﻿.comment-box {
+    border: 1px solid;
+    position: absolute; 
+    padding: 2px; 
+    display: flex; 
+    align-items: center;
+}
