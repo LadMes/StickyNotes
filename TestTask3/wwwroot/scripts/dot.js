@@ -1,4 +1,4 @@
-﻿import Comment from "./comment.js";
+﻿import CommentContainer from "./comment-container.js";
 
 export default class Dot {
     constructor(dot) {
@@ -8,8 +8,7 @@ export default class Dot {
         this.radius = dot.radius;
         this.colorHex = dot.colorHex;
         this.#createDotImage();
-        this.comments = {};
-        this.#setComments(dot.comments);
+        this.commentContainer = new CommentContainer(dot.comments);
     }
 
     #createDotImage() {
@@ -19,21 +18,14 @@ export default class Dot {
             radius: this.radius,
             fill: this.colorHex
         });
+
         this.dotImage.on("click", () => {
             fetch(`api/Dots/${this.id}`, {
                 method: "DELETE"
             }).then(() => {
                 this.dotImage.remove();
-                for (let comment in this.comments) {
-                    this.comments[comment].commentBox.remove();
-                }
+                this.commentContainer.commentContainer.remove();
             });
         });
-    }
-
-    #setComments(comments) {
-        for (let i = 0; i < comments.length; i++) {
-            this.comments[comments[i].id] = new Comment(comments[i]);
-        }
     }
 }

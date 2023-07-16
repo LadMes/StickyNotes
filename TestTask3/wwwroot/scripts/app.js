@@ -18,12 +18,7 @@ await fetch("api/Dots").then(res => {
     for (let dot of dots) {
         let d = new Dot(dot);
         layer.add(d.dotImage);
-
-        let i = 0;
-        for (let comment in d.comments) {
-            container.appendChild(d.comments[comment].commentBox);
-            d.comments[comment].setCommentBoxPosition(d, i);
-            i++;
-        }
+        container.appendChild(d.commentContainer.commentContainer);
+        d.commentContainer.setCommentContainerPosition(d);
     }
 });

@@ -1,0 +1,17 @@
+﻿.comment-container {
+    display: flex;
+    position: absolute;
+    flex-flow: column;
+    justify-content: center;
+    row-gap: 0.2rem;
+    margin-top: 0.5rem;
+}
+
+.comment-box {
+    border: 1px solid grey;
+    padding: 0.2rem;
+    display: flex;
+    align-items: center;
+    width: max-content;
+    align-self: center;
+}

@@ -1,4 +1,14 @@
-﻿@import 'comment-box.css';
+﻿@import 'comment.css';
+
+:root {
+    font-family: Calibri;
+    font-size: 12pt;
+    color: forestgreen;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
 html, body {
     height: 100%;
