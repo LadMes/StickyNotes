@@ -13,7 +13,7 @@ stage.add(layer);
 await fetch("api/Dots").then(res => {
     return res.json();
 }).then(dots => {
-    let container = document.querySelector("#container").firstElementChild;
+    let container = document.querySelector("#container");
 
     for (let dot of dots) {
         let d = new Dot(dot);
