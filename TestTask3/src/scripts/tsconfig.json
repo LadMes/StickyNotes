@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "noEmit": true,
     "noEmitOnError": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
