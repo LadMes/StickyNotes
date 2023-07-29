@@ -12785,9 +12785,9 @@ module.exports = styleTagTransform;
 
 /***/ }),
 
-/***/ "./src/scripts/comment-container.js":
+/***/ "./src/scripts/comment-container.ts":
 /*!******************************************!*\
-  !*** ./src/scripts/comment-container.js ***!
+  !*** ./src/scripts/comment-container.ts ***!
   \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -12795,7 +12795,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ CommentContainer)
 /* harmony export */ });
-/* harmony import */ var _comment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./comment */ "./src/scripts/comment.js");
+/* harmony import */ var _comment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./comment */ "./src/scripts/comment.ts");
 
 class CommentContainer {
     comments;
@@ -12813,13 +12813,13 @@ class CommentContainer {
         }
     }
 }
-//# sourceMappingURL=comment-container.js.map
+
 
 /***/ }),
 
-/***/ "./src/scripts/comment.js":
+/***/ "./src/scripts/comment.ts":
 /*!********************************!*\
-  !*** ./src/scripts/comment.js ***!
+  !*** ./src/scripts/comment.ts ***!
   \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -12847,13 +12847,13 @@ class CommentBox {
         return span;
     }
 }
-//# sourceMappingURL=comment.js.map
+
 
 /***/ }),
 
-/***/ "./src/scripts/sticky-note.js":
+/***/ "./src/scripts/sticky-note.ts":
 /*!************************************!*\
-  !*** ./src/scripts/sticky-note.js ***!
+  !*** ./src/scripts/sticky-note.ts ***!
   \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -12861,7 +12861,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ StickyNote)
 /* harmony export */ });
-/* harmony import */ var _comment_container__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./comment-container */ "./src/scripts/comment-container.js");
+/* harmony import */ var _comment_container__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./comment-container */ "./src/scripts/comment-container.ts");
 /* harmony import */ var konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! konva */ "./node_modules/konva/lib/index.js");
 /* harmony import */ var konva__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(konva__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -12899,7 +12899,7 @@ class StickyNote {
         elem.style.left = (this.dot.x - elem.offsetWidth / 2).toString() + 'px';
     }
 }
-//# sourceMappingURL=sticky-note.js.map
+
 
 /***/ })
 
@@ -12998,7 +12998,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_main_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../styles/main.css */ "./src/styles/main.css");
 /* harmony import */ var konva__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! konva */ "./node_modules/konva/lib/index.js");
 /* harmony import */ var konva__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(konva__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _sticky_note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sticky-note */ "./src/scripts/sticky-note.js");
+/* harmony import */ var _sticky_note__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sticky-note */ "./src/scripts/sticky-note.ts");
 
 
 
@@ -13027,4 +13027,4 @@ fetch('api/Dots').then(async (res) => {
 
 /******/ })()
 ;
-//# sourceMappingURL=app.89ffa54a62890c1e0445.js.map
+//# sourceMappingURL=app.6f85a0d3c5d1de669a2c.js.map
