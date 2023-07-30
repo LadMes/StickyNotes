@@ -362,4 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-src/scripts/compiled/
+/TestTask3/src/scripts/*.js
+/TestTask3/src/scripts/*.map

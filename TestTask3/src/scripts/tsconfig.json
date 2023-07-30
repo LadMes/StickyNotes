@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "esnext",
     "noEmitOnError": true,
-    "outDir": "compiled",
     "noImplicitAny": true,
     "strictNullChecks": true,
     "sourceMap": true,

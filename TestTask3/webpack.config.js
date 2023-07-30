@@ -31,7 +31,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title: "Dots with Comments",
+            title: "Sticky Notes",
             template: "./src/index.html",
         })
     ],
