@@ -362,5 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-src/scripts/*.js
-src/scripts/*.map
+src/scripts/compiled/
