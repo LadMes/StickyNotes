@@ -2,9 +2,9 @@
 
 namespace TestTask3.Data
 {
-    public interface IDotRepository
+    public interface IStickyNoteRepository
     {
-        public IList<Dot> GetDots();
+        public IList<StickyNote> GetDots();
 
         public bool Delete(int id);
     }

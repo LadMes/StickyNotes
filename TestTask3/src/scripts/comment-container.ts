@@ -1,21 +1,21 @@
-﻿import CommentBox, { type Comment } from './comment'
+﻿import { CommentBox, type Comment } from './comment'
 
 export default class CommentContainer {
-  comments: CommentBox[]
-  commentContainerElement: HTMLDivElement
+  commentBoxes: CommentBox[]
+  element: HTMLDivElement
 
   constructor (comments: Comment[]) {
-    this.comments = []
+    this.commentBoxes = []
     this.#createCommentContainer(comments)
   }
 
   #createCommentContainer (comments: Comment[]): void {
-    this.commentContainerElement = document.createElement('div')
-    this.commentContainerElement.setAttribute('class', 'comment-container')
+    this.element = document.createElement('div')
+    this.element.setAttribute('class', 'comment-container')
 
     for (let i = 0; i < comments.length; i++) {
-      this.comments[i] = new CommentBox(comments[i])
-      this.commentContainerElement.appendChild(this.comments[i].commentBox)
+      this.commentBoxes[i] = new CommentBox(comments[i])
+      this.element.appendChild(this.commentBoxes[i].element)
     }
   }
 }

@@ -1,24 +1,24 @@
-﻿export default class CommentBox {
-  comment: Comment
-  commentBox: HTMLDivElement
+﻿export class CommentBox {
+  id: number
+  element: HTMLDivElement
 
   constructor (comment: Comment) {
-    this.comment = comment
-    this.#createCommentBox()
+    this.id = comment.id
+    this.#createCommentBox(comment)
   }
 
-  #createCommentBox (): void {
-    this.commentBox = document.createElement('div')
-    this.commentBox.setAttribute('id', `comment-${this.comment.id}`)
-    this.commentBox.setAttribute('class', 'comment-box')
-    this.commentBox.style.backgroundColor = this.comment.backgroundColorHex
+  #createCommentBox (comment: Comment): void {
+    this.element = document.createElement('div')
+    this.element.setAttribute('id', `comment-${comment.id}`)
+    this.element.setAttribute('class', 'comment-box')
+    this.element.style.backgroundColor = comment.backgroundColorHex
 
-    this.commentBox.appendChild(this.#createSpanElementWithText())
+    this.element.appendChild(this.#createSpanElementWithText(comment.text))
   }
 
-  #createSpanElementWithText (): HTMLSpanElement {
+  #createSpanElementWithText (text: string): HTMLSpanElement {
     const span = document.createElement('span')
-    span.innerText = this.comment.text
+    span.innerText = text
     return span
   }
 }

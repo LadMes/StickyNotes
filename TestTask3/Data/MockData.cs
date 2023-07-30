@@ -11,6 +11,7 @@ namespace TestTask3.Data
 
             context.Comments.AddRange(comments);
             context.Dots.AddRange(dots);
+            context.StickyNotes.AddRange(stickyNotes);
             context.SaveChanges();
         }
 
@@ -70,8 +71,7 @@ namespace TestTask3.Data
                 X = 150,
                 Y = 50,
                 Radius = 25,
-                ColorHex = "#AAAAAA",
-                Comments = new List<Comment>() { comments[0], comments[1] }
+                ColorHex = "#AAAAAA"
             },
 
             new Dot()
@@ -80,12 +80,28 @@ namespace TestTask3.Data
                 X = 345,
                 Y = 50,
                 Radius = 45,
-                ColorHex = "#FF0000",
-                Comments = new List<Comment>() 
-                { 
-                    comments[2], 
-                    comments[3], 
-                    comments[4], 
+                ColorHex = "#FF0000"
+            }
+        };
+
+        private static List<StickyNote> stickyNotes = new List<StickyNote>()
+        {
+            new StickyNote()
+            {
+                Id = 1,
+                Dot = dots[0],
+                Comments = new List<Comment>() { comments[0], comments[1] }
+            },
+
+            new StickyNote() 
+            {
+                Id = 2,
+                Dot = dots[1],
+                Comments = new List<Comment>()
+                {
+                    comments[2],
+                    comments[3],
+                    comments[4],
                     comments[5],
                     comments[6],
                     comments[7]

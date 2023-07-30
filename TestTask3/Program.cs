@@ -11,7 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseInMemoryDatabase("DotsDB");
 });
 
-builder.Services.AddScoped<IDotRepository, InMemoryDotRepository>();
+builder.Services.AddScoped<IStickyNoteRepository, InMemoryStickyNoteRepository>();
 
 
 var app = builder.Build();

@@ -6,6 +6,8 @@ namespace TestTask3.Models
     {
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Dot> Dots { get; set; }
+        public DbSet<StickyNote> StickyNotes { get; set; }
+        
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -13,7 +15,8 @@ namespace TestTask3.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Dot>().Navigation(d => d.Comments).AutoInclude();
+            modelBuilder.Entity<StickyNote>().Navigation(sn => sn.Comments).AutoInclude();
+            modelBuilder.Entity<StickyNote>().Navigation(sn => sn.Dot).AutoInclude();
         }
     }
 }
