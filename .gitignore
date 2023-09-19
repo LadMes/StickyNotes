@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 /TestTask3/src/scripts/*.js
 /TestTask3/src/scripts/*.map
+/TestTask3/Migrations
