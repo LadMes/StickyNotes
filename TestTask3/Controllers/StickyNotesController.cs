@@ -17,7 +17,7 @@ namespace TestTask3.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return new JsonResult(stickyNoteRepository.GetDots());
+            return new JsonResult(stickyNoteRepository.GetStickyNotes());
         }
 
         [HttpDelete]

@@ -2,11 +2,11 @@
 
 namespace TestTask3.Data
 {
-    public class InMemoryStickyNoteRepository : IStickyNoteRepository
+    public class PostgresStickyNoteRepository : IStickyNoteRepository
     {
         private readonly AppDbContext context;
 
-        public InMemoryStickyNoteRepository(AppDbContext context) 
+        public PostgresStickyNoteRepository(AppDbContext context) 
         {
             this.context = context;
         }
@@ -24,7 +24,7 @@ namespace TestTask3.Data
             return true;
         }
 
-        public IList<StickyNote> GetDots()
+        public IList<StickyNote> GetStickyNotes()
         {
             return context.StickyNotes.ToList();
         }

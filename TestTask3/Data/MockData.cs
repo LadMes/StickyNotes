@@ -9,10 +9,14 @@ namespace TestTask3.Data
             var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetService<AppDbContext>();
 
-            context.Comments.AddRange(comments);
-            context.Dots.AddRange(dots);
-            context.StickyNotes.AddRange(stickyNotes);
-            context.SaveChanges();
+            var res = context.StickyNotes.ToList();
+            if (res.Count == 0) 
+            {
+                context.Comments.AddRange(comments);
+                context.Dots.AddRange(dots);
+                context.StickyNotes.AddRange(stickyNotes);
+                context.SaveChanges();
+            }
         }
 
         private static List<Comment> comments = new List<Comment>()

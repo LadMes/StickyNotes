@@ -4,7 +4,7 @@ namespace TestTask3.Data
 {
     public interface IStickyNoteRepository
     {
-        public IList<StickyNote> GetDots();
+        public IList<StickyNote> GetStickyNotes();
 
         public bool Delete(int id);
     }

@@ -11,5 +11,8 @@
         public int Radius { get; set; }
 
         public string ColorHex { get; set; } = "#FFFFFF";
+
+
+        public int StickyNoteId { get; set; }
     }
 }

@@ -7,5 +7,8 @@
         public string Text { get; set; } = "";
 
         public string BackgroundColorHex { get; set; } = "#FFFFFF";
+
+
+        public int StickyNoteId { get; set; }
     }
 }

@@ -8,10 +8,10 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
-    option.UseInMemoryDatabase("DotsDB");
+    option.UseNpgsql(builder.Configuration.GetConnectionString("StickyNotesPostgres"));
 });
 
-builder.Services.AddScoped<IStickyNoteRepository, InMemoryStickyNoteRepository>();
+builder.Services.AddScoped<IStickyNoteRepository, PostgresStickyNoteRepository>();
 
 
 var app = builder.Build();
