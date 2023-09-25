@@ -24,7 +24,8 @@ export default class StickyNoteElement {
   #addDotImage (dot: Dot): void {
     this.dotImage = new DotImage(dot)
 
-    this.dotImage.element.on('click', () => {
+    this.dotImage.element.on('click', (e) => {
+      e.cancelBubble = true
       fetch(`api/StickyNotes/${this.id}`, {
         method: 'DELETE'
       }).then(() => {

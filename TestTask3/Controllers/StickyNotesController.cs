@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TestTask3.Data;
+using TestTask3.Models;
 
 namespace TestTask3.Controllers
 {
@@ -29,6 +30,13 @@ namespace TestTask3.Controllers
             }
             
             return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] Dot dot)
+        {
+            StickyNote stickyNote = stickyNoteRepository.Create(dot);
+            return Created($"api/StickyNotes/{stickyNote.Id}", stickyNote);
         }
     }
 }

@@ -7,5 +7,7 @@ namespace TestTask3.Data
         public IList<StickyNote> GetStickyNotes();
 
         public bool Delete(int id);
+
+        public StickyNote Create(Dot dot);
     }
 }

@@ -9,6 +9,7 @@ const stage = new Konva.Stage({
 })
 
 const layer = new Konva.Layer()
+
 stage.add(layer)
 
 fetch('api/StickyNotes').then(async res => {
@@ -22,4 +23,37 @@ fetch('api/StickyNotes').then(async res => {
   }
 }).catch((err) => {
   console.log(err)
+})
+
+stage.addEventListener('click', (e: PointerEvent) => {
+  if (e.button === 0) {
+    let radius = 0
+    do {
+      const value = prompt('Please enter dot radius')
+      if (value != null) {
+        radius = parseInt(value)
+      }
+    } while (radius <= 0 || isNaN(radius))
+
+    fetch('api/StickyNotes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        x: e.pageX,
+        y: e.pageY,
+        radius
+      })
+    }).then(async res => {
+      return await res.json()
+    }).then((stickyNote: StickyNote) => {
+      const container = stage.container()
+      const sn = new StickyNoteElement(stickyNote)
+      sn.mount(layer, container)
+    })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 })

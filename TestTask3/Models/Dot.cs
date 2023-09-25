@@ -10,7 +10,7 @@
 
         public int Radius { get; set; }
 
-        public string ColorHex { get; set; } = "#FFFFFF";
+        public string ColorHex { get; set; } = "#000";
 
 
         public int StickyNoteId { get; set; }
