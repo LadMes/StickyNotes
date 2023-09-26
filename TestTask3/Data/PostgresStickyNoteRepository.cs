@@ -33,8 +33,7 @@ namespace TestTask3.Data
         {
             StickyNote stickyNote = new StickyNote()
             {
-                Dot = dot,
-                Comments = new List<Comment>()
+                Dot = dot
             };
             
             context.StickyNotes.Add(stickyNote);
