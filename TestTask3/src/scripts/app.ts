@@ -1,6 +1,7 @@
 ﻿import '../styles/main.css'
 import Konva from 'konva'
-import StickyNoteElement, { type StickyNote } from './sticky-note'
+import { type Dot } from './models/dot'
+import { createStickyNote, getStickyNotes } from './api-calls'
 
 const stage = new Konva.Stage({
   container: 'container',
@@ -8,52 +9,30 @@ const stage = new Konva.Stage({
   height: document.body.clientHeight
 })
 
-const layer = new Konva.Layer()
+stage.add(new Konva.Layer())
 
-stage.add(layer)
-
-fetch('api/StickyNotes').then(async res => {
-  return await res.json()
-}).then((stickyNotes: StickyNote[]) => {
-  const container = stage.container()
-
-  for (const stickyNote of stickyNotes) {
-    const sn = new StickyNoteElement(stickyNote)
-    sn.mount(layer, container)
-  }
-}).catch((err) => {
-  console.log(err)
-})
+getStickyNotes(stage)
 
 stage.addEventListener('click', (e: PointerEvent) => {
   if (e.button === 0) {
     let radius = 0
+    // TO-DO: Replace prompt with movable div
     do {
       const value = prompt('Please enter dot radius')
-      if (value != null) {
-        radius = parseInt(value)
+      if (value == null) {
+        break
       }
+      radius = parseInt(value)
     } while (radius <= 0 || isNaN(radius))
 
-    fetch('api/StickyNotes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        x: e.pageX,
-        y: e.pageY,
-        radius
-      })
-    }).then(async res => {
-      return await res.json()
-    }).then((stickyNote: StickyNote) => {
-      const container = stage.container()
-      const sn = new StickyNoteElement(stickyNote)
-      sn.mount(layer, container)
-    })
-      .catch((err) => {
-        console.log(err)
-      })
+    const dot: Dot = {
+      x: e.pageX,
+      y: e.pageY,
+      radius,
+      colorHex: '#0'
+    }
+    if (radius > 0) {
+      createStickyNote(stage, dot)
+    }
   }
 })

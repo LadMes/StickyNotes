@@ -2,7 +2,7 @@
 import { type Circle } from 'konva/lib/shapes/Circle'
 
 export class DotImage {
-  id: number
+  id?: number
   element: Circle
 
   constructor (dot: Dot) {
@@ -21,7 +21,7 @@ export class DotImage {
 }
 
 export interface Dot {
-  id: number
+  id?: number
   x: number
   y: number
   radius: number
