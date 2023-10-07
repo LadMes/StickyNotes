@@ -1,7 +1,9 @@
 ﻿import '../styles/main.css'
+import '../assets/close_icon.png'
 import Konva from 'konva'
 import { type Dot } from './models/dot'
 import { createStickyNote, getStickyNotes } from './api-calls'
+import DialogMenu from './dialog-menu'
 
 const stage = new Konva.Stage({
   container: 'container',
@@ -15,17 +17,8 @@ getStickyNotes(stage)
 
 stage.addEventListener('click', (e: PointerEvent) => {
   if (e.button === 0) {
-    let radius = 0
-    // TO-DO: Replace prompt with movable div
-    do {
-      const value = prompt('Please enter dot radius')
-      if (value == null) {
-        break
-      }
-      radius = parseInt(value)
-    } while (radius <= 0 || isNaN(radius))
-
-    const dot: Dot = {
+    document.body.append(new DialogMenu('dialog-menu-add').dialogMenu)
+    /* const dot: Dot = {
       x: e.pageX,
       y: e.pageY,
       radius,
@@ -33,6 +26,6 @@ stage.addEventListener('click', (e: PointerEvent) => {
     }
     if (radius > 0) {
       createStickyNote(stage, dot)
-    }
+    } */
   }
 })
