@@ -8,8 +8,9 @@
 }
 
 
-.dialog-menu-add {
-
+.dialog-menu-new-sticky-note {
+    width: 400px;
+    height: 500px;
 }
 
 .close-icon {

@@ -1,82 +1,129 @@
-﻿export default class DialogMenu {
-  static instance: DialogMenu | null = null
-  dialogMenu: HTMLDivElement
-  isMoving: boolean = false
-  currentX: number
-  currentY: number
+﻿const types: Record<string, () => DialogMenu> = {
+  DMNewStickyNote: createDMNewStickyNote
+}
 
-  constructor (type: string) {
-    if (DialogMenu.instance === null) {
-      DialogMenu.instance = this
+export default function createDialogMenu (type: string): DialogMenu {
+  try {
+    return types[type]()
+  } catch (err) {
+    console.log(err)
+    // TODO: Add Default DM
+    return createDMNewStickyNote()
+  }
+}
 
-      this.dialogMenu = document.createElement('div')
-      this.dialogMenu.classList.add('dialog-menu')
-      this.dialogMenu.style.width = '400px'
-      this.dialogMenu.style.height = '500px'
+abstract class DialogMenu extends HTMLDivElement {
+  private isMoving: boolean = false
+  private currentX: number
+  private currentY: number
 
-      const top = window.innerHeight / 2 - parseInt(this.dialogMenu.style.height) / 2
-      this.dialogMenu.style.top = top < 0 ? '0px' : top.toString() + 'px'
-
-      const left = window.innerWidth / 2 - parseInt(this.dialogMenu.style.width) / 2
-      this.dialogMenu.style.left = left < 0 ? '0px' : left.toString() + 'px'
-
-      this.dialogMenu.addEventListener('mousedown', this.#mousedown)
-      this.dialogMenu.addEventListener('mousemove', this.#mousemove)
-      this.dialogMenu.addEventListener('mouseup', this.#mouseup)
-
-      this.dialogMenu.appendChild(this.#createCloseIcon())
-    }
-
-    return DialogMenu.instance
+  constructor () {
+    super()
+    this.classList.add('dialog-menu')
+    this.appendChild(this.createCloseIcon())
   }
 
-  #mousedown (e: MouseEvent): void {
-    if (DialogMenu.instance !== null) {
-      DialogMenu.instance.dialogMenu.style.cursor = 'move'
-      DialogMenu.instance.isMoving = true
-      DialogMenu.instance.currentX = e.offsetX
-      DialogMenu.instance.currentY = e.offsetY
-    }
+  connectedCallback (): void {
+    const top = window.innerHeight / 2 - this.offsetHeight / 2
+    this.style.top = top < 0 ? '0px' : top.toString() + 'px'
+
+    const left = window.innerWidth / 2 - this.offsetWidth / 2
+    this.style.left = left < 0 ? '0px' : left.toString() + 'px'
+
+    this.addEventListener('mousedown', this.mousedown)
+    this.addEventListener('mousemove', this.mousemove)
+    this.addEventListener('mouseup', this.mouseup)
   }
 
-  #mousemove (e: MouseEvent): void {
-    if (DialogMenu.instance?.isMoving === true) {
-      const currentLeft = parseInt(DialogMenu.instance.dialogMenu.style.left)
-      let nextLeft = currentLeft - (DialogMenu.instance.currentX - e.offsetX)
+  disconnectedCallback (): void {
+    this.removeEventListener('mousedown', this.mousedown)
+    this.removeEventListener('mousemove', this.mousemove)
+    this.removeEventListener('mouseup', this.mouseup)
+  }
+
+  private mousedown (e: MouseEvent): void {
+    this.style.cursor = 'move'
+    this.isMoving = true
+    this.currentX = e.offsetX
+    this.currentY = e.offsetY
+  }
+
+  private mousemove (e: MouseEvent): void {
+    if (this.isMoving) {
+      const currentLeft = parseInt(this.style.left)
+      let nextLeft = currentLeft - (this.currentX - e.offsetX)
       if (nextLeft < 0) {
         nextLeft = 0
       }
-      DialogMenu.instance.dialogMenu.style.left = nextLeft.toString() + 'px'
+      this.style.left = nextLeft.toString() + 'px'
 
-      const currentTop = parseInt(DialogMenu.instance.dialogMenu.style.top)
-      let nextTop = currentTop - (DialogMenu.instance.currentY - e.offsetY)
+      const currentTop = parseInt(this.style.top)
+      let nextTop = currentTop - (this.currentY - e.offsetY)
       if (nextTop < 0) {
         nextTop = 0
       }
-      DialogMenu.instance.dialogMenu.style.top = nextTop.toString() + 'px'
+      this.style.top = nextTop.toString() + 'px'
     }
   }
 
-  #mouseup (e: MouseEvent): void {
-    if (DialogMenu.instance?.isMoving === true) {
-      DialogMenu.instance.dialogMenu.style.cursor = 'default'
-      DialogMenu.instance.isMoving = false
+  private mouseup (e: MouseEvent): void {
+    if (this.isMoving) {
+      this.style.cursor = 'default'
+      this.isMoving = false
     }
   }
 
-  #createCloseIcon (): HTMLImageElement {
+  private createCloseIcon (): HTMLImageElement {
     const closeIcon = document.createElement('img')
     closeIcon.src = '../close_icon.png'
     closeIcon.classList.add('close-icon')
-    closeIcon.addEventListener('click', this.#remove)
+    closeIcon.addEventListener('click', this.removeDialogMenu)
 
     return closeIcon
   }
 
-  #remove (e: Event): void {
-    if (e.target instanceof HTMLImageElement) {
-      e.target.parentElement?.remove()
-      DialogMenu.instance = null
-    }
+  private removeDialogMenu (): void {
+    this.parentElement?.remove()
   }
 }
+
+function createDMNewStickyNote (): DialogMenu {
+  return new DMNewStickyNote()
+}
+
+class DMNewStickyNote extends DialogMenu {
+  connectedCallback (): void {
+    this.classList.add('dialog-menu-new-sticky-note')
+    this.appendChild(new InputArea('color', 'hexColor', 'Select Color'))
+    // TODO: check why the parent connectedCallback is not firing
+    super.connectedCallback()
+  }
+}
+
+class InputArea extends HTMLDivElement {
+  constructor (inputType: string, name: string, text: string) {
+    super()
+    this.appendChild(this.createLabel(name, text))
+    this.appendChild(this.createInput(inputType, name))
+  }
+
+  private createInput (inputType: string, name: string): HTMLInputElement {
+    const input = document.createElement('input')
+    input.type = inputType
+    input.name = name
+    input.id = name
+
+    return input
+  }
+
+  private createLabel (name: string, text: string): HTMLLabelElement {
+    const label = document.createElement('label')
+    label.htmlFor = name
+    label.innerText = text
+
+    return label
+  }
+}
+
+customElements.define('dialog-menu', DMNewStickyNote, { extends: 'div' })
+customElements.define('input-area', InputArea, { extends: 'div' })
