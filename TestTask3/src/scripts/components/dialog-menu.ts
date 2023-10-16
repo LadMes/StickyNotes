@@ -1,4 +1,6 @@
-﻿const types: Record<string, () => DialogMenu> = {
+﻿import InputArea from "./input-area"
+
+const types: Record<string, () => DialogMenu> = {
   DMNewStickyNote: createDMNewStickyNote
 }
 
@@ -92,38 +94,13 @@ function createDMNewStickyNote (): DialogMenu {
 }
 
 class DMNewStickyNote extends DialogMenu {
-  connectedCallback (): void {
+  constructor () {
+    super()
     this.classList.add('dialog-menu-new-sticky-note')
     this.appendChild(new InputArea('color', 'hexColor', 'Select Color'))
-    // TODO: check why the parent connectedCallback is not firing
-    super.connectedCallback()
   }
 }
 
-class InputArea extends HTMLDivElement {
-  constructor (inputType: string, name: string, text: string) {
-    super()
-    this.appendChild(this.createLabel(name, text))
-    this.appendChild(this.createInput(inputType, name))
-  }
-
-  private createInput (inputType: string, name: string): HTMLInputElement {
-    const input = document.createElement('input')
-    input.type = inputType
-    input.name = name
-    input.id = name
-
-    return input
-  }
-
-  private createLabel (name: string, text: string): HTMLLabelElement {
-    const label = document.createElement('label')
-    label.htmlFor = name
-    label.innerText = text
-
-    return label
-  }
-}
 
 customElements.define('dialog-menu', DMNewStickyNote, { extends: 'div' })
-customElements.define('input-area', InputArea, { extends: 'div' })
+
