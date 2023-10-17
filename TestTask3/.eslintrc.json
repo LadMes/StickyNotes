@@ -10,10 +10,5 @@
     "project": "**/tsconfig.json"
   },
   "rules": {
-  },
-  "settings": {
-    "import/resolver": {
-      "paths": [ "./src/scripts" ]
-    }
   }
 }

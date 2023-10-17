@@ -1,9 +1,10 @@
 ﻿import { DotImage, type Dot } from './dot'
-import { type Comment } from './comment'
-import CommentContainer from './comment-container'
+import type Comment from '../models/comment'
+import CommentContainer from '../components/comment-container'
 import { type Layer } from 'konva/lib/Layer'
 import { type Circle } from 'konva/lib/shapes/Circle'
 
+// TODO: Change into Web-Component
 export default class StickyNoteElement {
   id: number
   commentContainer: CommentContainer
@@ -17,7 +18,7 @@ export default class StickyNoteElement {
 
   mount (layer: Layer, container: HTMLElement): void {
     layer.add(this.dotImage.element)
-    container.appendChild(this.commentContainer.element)
+    container.appendChild(this.commentContainer)
     this.#setCommentContainerPosition()
   }
 
@@ -30,7 +31,7 @@ export default class StickyNoteElement {
         method: 'DELETE'
       }).then(() => {
         this.dotImage.element.remove()
-        this.commentContainer.element.remove()
+        this.commentContainer.remove()
       }).catch((err) => {
         console.log(err)
       })
@@ -38,10 +39,9 @@ export default class StickyNoteElement {
   }
 
   #setCommentContainerPosition (): void {
-    const commentContainer: HTMLDivElement = this.commentContainer.element
     const dot: Circle = this.dotImage.element
-    commentContainer.style.top = (dot.y() + dot.radius()).toString() + 'px'
-    commentContainer.style.left = (dot.x() - commentContainer.offsetWidth / 2).toString() + 'px'
+    this.commentContainer.style.top = (dot.y() + dot.radius()).toString() + 'px'
+    this.commentContainer.style.left = (dot.x() - this.commentContainer.offsetWidth / 2).toString() + 'px'
   }
 }
 
