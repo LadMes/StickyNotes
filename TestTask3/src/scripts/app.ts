@@ -1,7 +1,7 @@
 ﻿import '../styles/main.css'
 import '../assets/close_icon.png'
 import Konva from 'konva'
-import { type Dot } from './models/dot'
+import type Dot from './models/dot'
 import { createStickyNote, getStickyNotes } from './api-calls'
 import createDialogMenu from './components/dialog-menu'
 

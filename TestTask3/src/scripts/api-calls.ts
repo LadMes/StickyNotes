@@ -1,5 +1,6 @@
-﻿import { type StickyNote } from './models/sticky-note'
-import { type Dot } from './models/dot'
+﻿import type StickyNoteElement from './models/sticky-note'
+import { type StickyNote } from './models/sticky-note'
+import type Dot from './models/dot'
 import { type Stage } from 'konva/lib/Stage'
 import { showStickyNote, showStickyNotes } from './helpers'
 
@@ -30,4 +31,15 @@ export function createStickyNote (stage: Stage, dot: Dot): void {
     .catch((err) => {
       console.log(err)
     })
+}
+
+export function deleteStickyNote (stickyNoteElement: StickyNoteElement): void {
+  fetch(`${apiURL}/${stickyNoteElement.id}`, {
+    method: 'DELETE'
+  }).then(() => {
+    stickyNoteElement.dotImage.remove()
+    stickyNoteElement.commentContainer.remove()
+  }).catch((err) => {
+    console.log(err)
+  })
 }

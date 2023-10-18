@@ -1,4 +1,4 @@
-﻿import InputArea from "./input-area"
+﻿import InputArea from './input-area'
 
 const types: Record<string, () => DialogMenu> = {
   DMNewStickyNote: createDMNewStickyNote
@@ -101,6 +101,4 @@ class DMNewStickyNote extends DialogMenu {
   }
 }
 
-
 customElements.define('dialog-menu', DMNewStickyNote, { extends: 'div' })
-

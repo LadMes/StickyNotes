@@ -2,7 +2,6 @@
 import CommentBox from './comment-box'
 
 export default class CommentContainer extends HTMLDivElement {
-
   constructor (comments: Comment[]) {
     super()
 

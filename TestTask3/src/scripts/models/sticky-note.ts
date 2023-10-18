@@ -1,8 +1,9 @@
-﻿import { DotImage, type Dot } from './dot'
+﻿import type Dot from './dot'
+import DotImage from '../components/dot-image'
 import type Comment from '../models/comment'
 import CommentContainer from '../components/comment-container'
 import { type Layer } from 'konva/lib/Layer'
-import { type Circle } from 'konva/lib/shapes/Circle'
+import { deleteStickyNote } from '../api-calls'
 
 // TODO: Change into Web-Component
 export default class StickyNoteElement {
@@ -12,36 +13,28 @@ export default class StickyNoteElement {
 
   constructor (stickyNote: StickyNote) {
     this.id = stickyNote.id
-    this.#addDotImage(stickyNote.dot)
+    this.addDotImage(stickyNote.dot)
     this.commentContainer = new CommentContainer(stickyNote.comments)
   }
 
   mount (layer: Layer, container: HTMLElement): void {
-    layer.add(this.dotImage.element)
+    layer.add(this.dotImage)
     container.appendChild(this.commentContainer)
-    this.#setCommentContainerPosition()
+    this.setCommentContainerPosition()
   }
 
-  #addDotImage (dot: Dot): void {
+  private addDotImage (dot: Dot): void {
     this.dotImage = new DotImage(dot)
 
-    this.dotImage.element.on('click', (e) => {
+    this.dotImage.on('click', (e) => {
       e.cancelBubble = true
-      fetch(`api/StickyNotes/${this.id}`, {
-        method: 'DELETE'
-      }).then(() => {
-        this.dotImage.element.remove()
-        this.commentContainer.remove()
-      }).catch((err) => {
-        console.log(err)
-      })
+      deleteStickyNote(this)
     })
   }
 
-  #setCommentContainerPosition (): void {
-    const dot: Circle = this.dotImage.element
-    this.commentContainer.style.top = (dot.y() + dot.radius()).toString() + 'px'
-    this.commentContainer.style.left = (dot.x() - this.commentContainer.offsetWidth / 2).toString() + 'px'
+  private setCommentContainerPosition (): void {
+    this.commentContainer.style.top = (this.dotImage.y() + this.dotImage.radius()).toString() + 'px'
+    this.commentContainer.style.left = (this.dotImage.x() - this.commentContainer.offsetWidth / 2).toString() + 'px'
   }
 }
 
