@@ -5,6 +5,18 @@
     this.appendChild(this.createInput(inputType, name))
   }
 
+  connectedCallback (): void {
+    for (let i = 0; i < this.children.length; i++) {
+      this.children[i].addEventListener('mousedown', this.stopPropagaiton)
+    }
+  }
+
+  disconnectedCallback (): void {
+    for (let i = 0; i < this.children.length; i++) {
+      this.children[i].removeEventListener('mousedown', this.stopPropagaiton)
+    }
+  }
+
   private createInput (inputType: string, name: string): HTMLInputElement {
     const input = document.createElement('input')
     input.type = inputType
@@ -20,6 +32,10 @@
     label.innerText = text
 
     return label
+  }
+
+  private stopPropagaiton (e: Event): void {
+    e.stopPropagation()
   }
 }
 

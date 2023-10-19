@@ -5,7 +5,6 @@ import CommentContainer from '../components/comment-container'
 import { type Layer } from 'konva/lib/Layer'
 import { deleteStickyNote } from '../api-calls'
 
-// TODO: Change into Web-Component
 export default class StickyNoteElement {
   id: number
   commentContainer: CommentContainer
@@ -33,8 +32,8 @@ export default class StickyNoteElement {
   }
 
   private setCommentContainerPosition (): void {
-    this.commentContainer.style.top = (this.dotImage.y() + this.dotImage.radius()).toString() + 'px'
-    this.commentContainer.style.left = (this.dotImage.x() - this.commentContainer.offsetWidth / 2).toString() + 'px'
+    this.commentContainer.style.top = `${(this.dotImage.y() + this.dotImage.radius())}px`
+    this.commentContainer.style.left = `${(this.dotImage.x() - this.commentContainer.offsetWidth / 2)}px`
   }
 }
 

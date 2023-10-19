@@ -14,6 +14,10 @@ export default function createDialogMenu (type: string): DialogMenu {
   }
 }
 
+function createDMNewStickyNote (): DialogMenu {
+  return new DMNewStickyNote()
+}
+
 abstract class DialogMenu extends HTMLDivElement {
   private isMoving: boolean = false
   private currentX: number
@@ -89,15 +93,35 @@ abstract class DialogMenu extends HTMLDivElement {
   }
 }
 
-function createDMNewStickyNote (): DialogMenu {
-  return new DMNewStickyNote()
-}
-
+// TODO: add an input for chosing color of a comment box
 class DMNewStickyNote extends DialogMenu {
   constructor () {
     super()
     this.classList.add('dialog-menu-new-sticky-note')
     this.appendChild(new InputArea('color', 'hexColor', 'Select Color'))
+    this.appendChild(new InputArea('text', 'radius', 'Enter radius'))
+    this.createButtons()
+  }
+
+  // Temprary
+  // TODO: refactor, add event listener for the submit button
+  private createButtons (): void {
+    const buttonContainer = document.createElement('div')
+    const submitButton = document.createElement('button')
+    submitButton.type = 'submit'
+    submitButton.textContent = 'Create'
+    const addButton = document.createElement('button')
+    addButton.textContent = 'Add'
+    let commentNumber = 0
+    addButton.addEventListener('click', (e) => {
+      commentNumber++
+      const comment = new InputArea('text', 'text', `Comment ${commentNumber}`)
+      this.insertBefore(comment, this.children[this.children.length - 1])
+    })
+
+    buttonContainer.appendChild(submitButton)
+    buttonContainer.appendChild(addButton)
+    this.appendChild(buttonContainer)
   }
 }
 
