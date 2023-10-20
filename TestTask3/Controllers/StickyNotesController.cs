@@ -33,10 +33,10 @@ namespace TestTask3.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Dot dot)
+        public IActionResult Create([FromBody] StickyNote sn)
         {
-            // TODO: Add server side checking 
-            StickyNote stickyNote = stickyNoteRepository.Create(dot);
+            // TODO: Add server side checking
+            StickyNote stickyNote = stickyNoteRepository.Create(sn);
             return Created($"api/StickyNotes/{stickyNote.Id}", stickyNote);
         }
     }

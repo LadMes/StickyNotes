@@ -29,13 +29,8 @@ namespace TestTask3.Data
             return context.StickyNotes.ToList();
         }
 
-        public StickyNote Create(Dot dot)
+        public StickyNote Create(StickyNote stickyNote)
         {
-            StickyNote stickyNote = new StickyNote()
-            {
-                Dot = dot
-            };
-            
             context.StickyNotes.Add(stickyNote);
             context.SaveChanges();
 

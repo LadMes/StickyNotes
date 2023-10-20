@@ -8,6 +8,6 @@ namespace TestTask3.Data
 
         public bool Delete(int id);
 
-        public StickyNote Create(Dot dot);
+        public StickyNote Create(StickyNote stickyNote);
     }
 }
