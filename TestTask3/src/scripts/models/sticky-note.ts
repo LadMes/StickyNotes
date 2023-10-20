@@ -6,7 +6,7 @@ import { type Layer } from 'konva/lib/Layer'
 import { deleteStickyNote } from '../api-calls'
 
 export default class StickyNoteElement {
-  id: number
+  id?: number
   commentContainer: CommentContainer
   dotImage: DotImage
 
@@ -38,7 +38,7 @@ export default class StickyNoteElement {
 }
 
 export interface StickyNote {
-  id: number
+  id?: number
   dot: Dot
   comments: Comment[]
 }

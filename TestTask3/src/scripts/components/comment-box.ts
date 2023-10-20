@@ -1,7 +1,7 @@
 ﻿import type Comment from '../models/comment'
 
 export default class CommentBox extends HTMLDivElement {
-  commentId: number
+  commentId?: number
 
   constructor (comment: Comment) {
     super()

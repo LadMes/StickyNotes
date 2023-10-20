@@ -1,9 +1,8 @@
 ﻿import '../styles/main.css'
 import '../assets/close_icon.png'
 import Konva from 'konva'
-import type Dot from './models/dot'
-import { createStickyNote, getStickyNotes } from './api-calls'
-import createDialogMenu from './components/dialog-menu'
+import { getStickyNotes } from './api-calls'
+import { DMNewStickyNote } from './components/dialog-menu'
 
 const stage = new Konva.Stage({
   container: 'container',
@@ -17,16 +16,6 @@ getStickyNotes(stage)
 
 stage.addEventListener('click', (e: PointerEvent) => {
   if (e.button === 0 && document.getElementsByClassName('dialog-menu').length === 0) {
-    // document.body.append(new DialogMenu('dialog-menu-add').dialogMenu)
-    document.body.append(createDialogMenu('DMNewStickyNote'))
-    /* const dot: Dot = {
-      x: e.pageX,
-      y: e.pageY,
-      radius,
-      colorHex: '#0'
-    }
-    if (radius > 0) {
-      createStickyNote(stage, dot)
-    } */
+    document.body.append(new DMNewStickyNote(stage, e.pageX, e.pageY))
   }
 })

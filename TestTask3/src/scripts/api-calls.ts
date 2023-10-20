@@ -1,6 +1,5 @@
 ﻿import type StickyNoteElement from './models/sticky-note'
 import { type StickyNote } from './models/sticky-note'
-import type Dot from './models/dot'
 import { type Stage } from 'konva/lib/Stage'
 import { showStickyNote, showStickyNotes } from './helpers'
 
@@ -16,13 +15,13 @@ export function getStickyNotes (stage: Stage): void {
   })
 }
 
-export function createStickyNote (stage: Stage, dot: Dot): void {
+export function createStickyNote (stage: Stage, stickyNote: StickyNote): void {
   fetch(apiURL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(dot)
+    body: JSON.stringify(stickyNote)
   }).then(async res => {
     return await res.json()
   }).then((stickyNote: StickyNote) => {

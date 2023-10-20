@@ -1,5 +1,5 @@
 ﻿export default interface Comment {
-  id: number
+  id?: number
   text: string
   backgroundColorHex: string
 }

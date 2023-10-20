@@ -1,6 +1,11 @@
 ﻿import InputArea from './input-area'
+import type Dot from '../models/dot'
+import type Comment from '../models/comment'
+import { type StickyNote } from '../models/sticky-note'
+import { createStickyNote } from '../api-calls'
+import { type Stage } from 'konva/lib/Stage'
 
-const types: Record<string, () => DialogMenu> = {
+/* const types: Record<string, () => DialogMenu> = {
   DMNewStickyNote: createDMNewStickyNote
 }
 
@@ -16,7 +21,7 @@ export default function createDialogMenu (type: string): DialogMenu {
 
 function createDMNewStickyNote (): DialogMenu {
   return new DMNewStickyNote()
-}
+} */
 
 abstract class DialogMenu extends HTMLDivElement {
   private isMoving: boolean = false
@@ -94,22 +99,59 @@ abstract class DialogMenu extends HTMLDivElement {
 }
 
 // TODO: add an input for chosing color of a comment box
-class DMNewStickyNote extends DialogMenu {
-  constructor () {
+export class DMNewStickyNote extends DialogMenu {
+  dotX: number
+  dotY: number
+  stage: Stage
+
+  constructor (stage: Stage, dotX: number, dotY: number) {
     super()
+    this.dotX = dotX
+    this.dotY = dotY
+    this.stage = stage
     this.classList.add('dialog-menu-new-sticky-note')
-    this.appendChild(new InputArea('color', 'hexColor', 'Select Color'))
+    this.appendChild(new InputArea('color', 'colorHex', 'Select Color'))
     this.appendChild(new InputArea('text', 'radius', 'Enter radius'))
     this.createButtons()
   }
 
   // Temprary
-  // TODO: refactor, add event listener for the submit button
+  // TODO: refactor
   private createButtons (): void {
     const buttonContainer = document.createElement('div')
     const submitButton = document.createElement('button')
     submitButton.type = 'submit'
     submitButton.textContent = 'Create'
+    submitButton.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const radiusInput = this.querySelector('input[name=radius]') as HTMLInputElement
+      const dotColorInput = this.querySelector('input[name=colorHex]') as HTMLInputElement
+      const dot: Dot = {
+        x: this.dotX,
+        y: this.dotY,
+        radius: parseInt(radiusInput.value),
+        colorHex: dotColorInput.value
+      }
+
+      const commentInputs = Array.from(this.querySelectorAll('input[name=text]'))
+      const comments: Comment[] = []
+      commentInputs.forEach(el => {
+        const commentInput = el as HTMLInputElement
+        const comment: Comment = {
+          text: commentInput.value,
+          backgroundColorHex: '#33'
+        }
+        comments.push(comment)
+      })
+
+      const stickyNote: StickyNote = {
+        dot,
+        comments
+      }
+      createStickyNote(this.stage, stickyNote)
+      this.remove()
+    })
+
     const addButton = document.createElement('button')
     addButton.textContent = 'Add'
     let commentNumber = 0
