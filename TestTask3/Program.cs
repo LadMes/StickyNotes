@@ -22,6 +22,4 @@ app.MapControllers();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-MockData.SeedDatabase(app);
-
 app.Run();
