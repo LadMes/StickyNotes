@@ -4,7 +4,8 @@ import type Comment from '../models/comment'
 import { type StickyNote } from '../models/sticky-note'
 import { createStickyNote } from '../api-calls'
 import { type Stage } from 'konva/lib/Stage'
-import { getValueFromInput } from '../helpers'
+import { getInputByNameAttribute, getValueFromInput } from '../helpers'
+import CommentInputArea from './comment-input-area'
 
 /* const types: Record<string, () => DialogMenu> = {
   DMNewStickyNote: createDMNewStickyNote
@@ -23,6 +24,10 @@ export default function createDialogMenu (type: string): DialogMenu {
 function createDMNewStickyNote (): DialogMenu {
   return new DMNewStickyNote()
 } */
+
+const elementNames = {
+  DMNewStickyNote: 'dialog-menu-new-sticky-note'
+}
 
 abstract class DialogMenu extends HTMLDivElement {
   private isMoving: boolean = false
@@ -107,12 +112,23 @@ export class DMNewStickyNote extends DialogMenu {
 
   constructor (stage: Stage, dotX: number, dotY: number) {
     super()
+    this.setAttribute('is', elementNames.DMNewStickyNote)
     this.dotX = dotX
     this.dotY = dotY
     this.stage = stage
     this.classList.add('dialog-menu-new-sticky-note')
-    this.appendChild(new InputArea('color', 'colorHex', 'Select Color'))
-    this.appendChild(new InputArea('text', 'radius', 'Enter radius'))
+    this.appendChild(new InputArea({
+      type: 'color',
+      name: 'colorHex',
+      text: 'Select Color',
+      id: 'colorHex'
+    }))
+    this.appendChild(new InputArea({
+      type: 'text',
+      name: 'radius',
+      text: 'Enter radius',
+      id: 'radius'
+    }))
     this.createButtons()
   }
 
@@ -125,8 +141,8 @@ export class DMNewStickyNote extends DialogMenu {
     submitButton.textContent = 'Create'
     submitButton.addEventListener('click', (e) => {
       e.stopPropagation()
-      const radiusInput = this.querySelector<HTMLInputElement>('input[name=radius]')
-      const dotColorInput = this.querySelector<HTMLInputElement>('input[name=colorHex]')
+      const radiusInput = getInputByNameAttribute(this, 'radius')
+      const dotColorInput = getInputByNameAttribute(this, 'colorHex')
 
       const dot: Dot = {
         x: this.dotX,
@@ -135,13 +151,13 @@ export class DMNewStickyNote extends DialogMenu {
         colorHex: getValueFromInput(dotColorInput)
       }
 
-      const commentInputs = Array.from(this.querySelectorAll<HTMLInputElement>('input[name=text]'))
+      const commentInputs = Array.from(this.querySelectorAll<CommentInputArea>('div[is=comment-input-area]'))
       const comments: Comment[] = []
       commentInputs.forEach(el => {
         const comment: Comment = {
-          text: el.value,
-          backgroundColorHex: '#33',
-          textColorHex: '#0'
+          text: getValueFromInput(getInputByNameAttribute(el, 'text')),
+          backgroundColorHex: getValueFromInput(getInputByNameAttribute(el, 'backgroundColorHex')),
+          textColorHex: getValueFromInput(getInputByNameAttribute(el, 'textColorHex'))
         }
         comments.push(comment)
       })
@@ -160,7 +176,7 @@ export class DMNewStickyNote extends DialogMenu {
     addButton.addEventListener('click', (e) => {
       e.stopPropagation()
       commentNumber++
-      const comment = new InputArea('text', 'text', `Comment ${commentNumber}`)
+      const comment = new CommentInputArea(commentNumber)
       this.insertBefore(comment, this.children[this.children.length - 1])
     })
 
@@ -170,4 +186,4 @@ export class DMNewStickyNote extends DialogMenu {
   }
 }
 
-customElements.define('dialog-menu', DMNewStickyNote, { extends: 'div' })
+customElements.define(elementNames.DMNewStickyNote, DMNewStickyNote, { extends: 'div' })

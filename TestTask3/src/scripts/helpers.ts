@@ -18,3 +18,7 @@ export function getValueFromInput (input: HTMLInputElement | null): string {
   }
   return ''
 }
+
+export function getInputByNameAttribute (element: Element, name: string): HTMLInputElement | null {
+  return element.querySelector<HTMLInputElement>(`input[name=${name}]`)
+}
