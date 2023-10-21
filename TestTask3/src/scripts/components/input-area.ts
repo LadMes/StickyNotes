@@ -1,8 +1,14 @@
-﻿export default class InputArea extends HTMLDivElement {
-  constructor (inputType: string, name: string, text: string) {
+﻿const elementName = 'input-area'
+
+export default class InputArea extends HTMLDivElement {
+  private readonly options: Options
+
+  constructor (options: Options) {
     super()
-    this.appendChild(this.createLabel(name, text))
-    this.appendChild(this.createInput(inputType, name))
+    this.setAttribute('is', elementName)
+    this.options = options
+    this.appendChild(this.createLabel())
+    this.appendChild(this.createInput())
   }
 
   connectedCallback (): void {
@@ -17,19 +23,23 @@
     }
   }
 
-  private createInput (inputType: string, name: string): HTMLInputElement {
+  private createInput (): HTMLInputElement {
     const input = document.createElement('input')
-    input.type = inputType
-    input.name = name
-    input.id = name
+    input.type = this.options.type
+    input.name = this.options.name
+    input.id = this.options.id
+
+    if (this.options.value !== undefined) {
+      input.setAttribute('value', this.options.value)
+    }
 
     return input
   }
 
-  private createLabel (name: string, text: string): HTMLLabelElement {
+  private createLabel (): HTMLLabelElement {
     const label = document.createElement('label')
-    label.htmlFor = name
-    label.innerText = text
+    label.htmlFor = this.options.id
+    label.innerText = this.options.text
 
     return label
   }
@@ -39,4 +49,12 @@
   }
 }
 
-customElements.define('input-area', InputArea, { extends: 'div' })
+interface Options {
+  type: string
+  value?: string
+  name: string
+  id: string
+  text: string
+}
+
+customElements.define(elementName, InputArea, { extends: 'div' })
