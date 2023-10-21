@@ -1,10 +1,13 @@
 ﻿import type Comment from '../models/comment'
 
+const elementName = 'comment-box'
+
 export default class CommentBox extends HTMLDivElement {
   commentId?: number
 
   constructor (comment: Comment) {
     super()
+    this.setAttribute('is', elementName)
     this.commentId = comment.id
     this.createCommentBox(comment)
   }
@@ -25,4 +28,4 @@ export default class CommentBox extends HTMLDivElement {
   }
 }
 
-customElements.define('comment-box', CommentBox, { extends: 'div' })
+customElements.define(elementName, CommentBox, { extends: 'div' })
