@@ -140,7 +140,8 @@ export class DMNewStickyNote extends DialogMenu {
       commentInputs.forEach(el => {
         const comment: Comment = {
           text: el.value,
-          backgroundColorHex: '#33'
+          backgroundColorHex: '#33',
+          textColorHex: '#0'
         }
         comments.push(comment)
       })
@@ -157,6 +158,7 @@ export class DMNewStickyNote extends DialogMenu {
     addButton.textContent = 'Add'
     let commentNumber = 0
     addButton.addEventListener('click', (e) => {
+      e.stopPropagation()
       commentNumber++
       const comment = new InputArea('text', 'text', `Comment ${commentNumber}`)
       this.insertBefore(comment, this.children[this.children.length - 1])

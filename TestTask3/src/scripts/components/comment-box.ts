@@ -13,6 +13,7 @@ export default class CommentBox extends HTMLDivElement {
     this.setAttribute('id', `comment-${comment.id}`)
     this.setAttribute('class', 'comment-box')
     this.style.backgroundColor = comment.backgroundColorHex
+    this.style.color = comment.textColorHex
 
     this.appendChild(this.createSpanElementWithText(comment.text))
   }

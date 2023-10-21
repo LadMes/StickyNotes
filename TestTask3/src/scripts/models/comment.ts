@@ -2,4 +2,5 @@
   id?: number
   text: string
   backgroundColorHex: string
+  textColorHex: string
 }
