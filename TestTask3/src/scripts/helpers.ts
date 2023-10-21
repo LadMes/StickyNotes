@@ -11,3 +11,10 @@ export function showStickyNotes (stage: Stage, stickyNotes: StickyNote[]): void 
     showStickyNote(stage, stickyNote)
   }
 }
+
+export function getValueFromInput (input: HTMLInputElement | null): string {
+  if (input?.value !== undefined) {
+    return input.value
+  }
+  return ''
+}

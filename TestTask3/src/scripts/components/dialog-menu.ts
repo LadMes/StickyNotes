@@ -4,6 +4,7 @@ import type Comment from '../models/comment'
 import { type StickyNote } from '../models/sticky-note'
 import { createStickyNote } from '../api-calls'
 import { type Stage } from 'konva/lib/Stage'
+import { getValueFromInput } from '../helpers'
 
 /* const types: Record<string, () => DialogMenu> = {
   DMNewStickyNote: createDMNewStickyNote
@@ -124,21 +125,21 @@ export class DMNewStickyNote extends DialogMenu {
     submitButton.textContent = 'Create'
     submitButton.addEventListener('click', (e) => {
       e.stopPropagation()
-      const radiusInput = this.querySelector('input[name=radius]') as HTMLInputElement
-      const dotColorInput = this.querySelector('input[name=colorHex]') as HTMLInputElement
+      const radiusInput = this.querySelector<HTMLInputElement>('input[name=radius]')
+      const dotColorInput = this.querySelector<HTMLInputElement>('input[name=colorHex]')
+
       const dot: Dot = {
         x: this.dotX,
         y: this.dotY,
-        radius: parseInt(radiusInput.value),
-        colorHex: dotColorInput.value
+        radius: parseInt(getValueFromInput(radiusInput)),
+        colorHex: getValueFromInput(dotColorInput)
       }
 
-      const commentInputs = Array.from(this.querySelectorAll('input[name=text]'))
+      const commentInputs = Array.from(this.querySelectorAll<HTMLInputElement>('input[name=text]'))
       const comments: Comment[] = []
       commentInputs.forEach(el => {
-        const commentInput = el as HTMLInputElement
         const comment: Comment = {
-          text: commentInput.value,
+          text: el.value,
           backgroundColorHex: '#33'
         }
         comments.push(comment)
