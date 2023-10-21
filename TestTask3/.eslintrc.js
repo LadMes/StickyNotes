@@ -15,6 +15,7 @@ module.exports = {
   "extends": "standard-with-typescript",
 
   "ignorePatterns": [
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "webpack.config.js"
   ]
 }
