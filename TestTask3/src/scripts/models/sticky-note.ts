@@ -7,8 +7,8 @@ import { deleteStickyNote } from '../api-calls'
 
 export default class StickyNoteElement {
   id?: number
-  commentContainer: CommentContainer
-  dotImage: DotImage
+  private readonly commentContainer: CommentContainer
+  private dotImage: DotImage
 
   constructor (stickyNote: StickyNote) {
     this.id = stickyNote.id
@@ -20,6 +20,11 @@ export default class StickyNoteElement {
     layer.add(this.dotImage)
     container.appendChild(this.commentContainer)
     this.setCommentContainerPosition()
+  }
+
+  unmount (): void {
+    this.commentContainer.remove()
+    this.dotImage.remove()
   }
 
   private addDotImage (dot: Dot): void {

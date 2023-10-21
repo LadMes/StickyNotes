@@ -36,8 +36,7 @@ export function deleteStickyNote (stickyNoteElement: StickyNoteElement): void {
   fetch(`${apiURL}/${stickyNoteElement.id}`, {
     method: 'DELETE'
   }).then(() => {
-    stickyNoteElement.dotImage.remove()
-    stickyNoteElement.commentContainer.remove()
+    stickyNoteElement.unmount()
   }).catch((err) => {
     console.log(err)
   })
