@@ -13,4 +13,8 @@ module.exports = {
   },
 
   "extends": "standard-with-typescript",
+
+  "ignorePatterns": [
+    ".eslintrc.js"
+  ]
 }
