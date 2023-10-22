@@ -12,6 +12,10 @@ export function showStickyNotes (stage: Stage, stickyNotes: StickyNote[]): void 
   }
 }
 
+export function stopPropagation (e: Event): void {
+  e.stopPropagation()
+}
+
 export function getValueFromInput (input: HTMLInputElement | null): string {
   if (input?.value !== undefined) {
     return input.value

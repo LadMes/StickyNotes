@@ -1,10 +1,9 @@
 ﻿import InputArea from './input-area'
 import type Dot from '../models/dot'
 import type Comment from '../models/comment'
-import { type StickyNote } from '../models/sticky-note'
 import { createStickyNote } from '../api-calls'
 import { type Stage } from 'konva/lib/Stage'
-import { getInputByNameAttribute, getValueFromInput } from '../helpers'
+import { getInputByNameAttribute, getValueFromInput, stopPropagation } from '../helpers'
 import CommentInputArea from './comment-input-area'
 
 /* const types: Record<string, () => DialogMenu> = {
@@ -104,11 +103,11 @@ abstract class DialogMenu extends HTMLDivElement {
   }
 }
 
-// TODO: add an input for chosing color of a comment box
 export class DMNewStickyNote extends DialogMenu {
-  dotX: number
-  dotY: number
-  stage: Stage
+  private readonly dotX: number
+  private readonly dotY: number
+  private readonly stage: Stage
+  commentNumber: number = 0
 
   constructor (stage: Stage, dotX: number, dotY: number) {
     super()
@@ -129,60 +128,108 @@ export class DMNewStickyNote extends DialogMenu {
       text: 'Enter radius',
       id: 'radius'
     }))
-    this.createButtons()
+    this.appendChild(this.createButtons())
   }
 
-  // Temprary
-  // TODO: refactor
-  private createButtons (): void {
+  connectedCallback (): void {
+    super.connectedCallback()
+
+    const submitButton = this.querySelector<HTMLButtonElement>('#submit-button')
+    submitButton?.addEventListener('click', this.submitStickyNote)
+    submitButton?.addEventListener('mousedown', stopPropagation)
+
+    const addButton = this.querySelector<HTMLButtonElement>('#add-comment')
+    addButton?.addEventListener('click', this.addCommentInputArea)
+    addButton?.addEventListener('mousedown', stopPropagation)
+  }
+
+  disconnectedCallback (): void {
+    super.disconnectedCallback()
+
+    const submitButton = this.querySelector<HTMLButtonElement>('#submit-button')
+    submitButton?.removeEventListener('click', this.submitStickyNote)
+    submitButton?.removeEventListener('mousedown', stopPropagation)
+
+    const addButton = this.querySelector<HTMLButtonElement>('#add-comment')
+    addButton?.removeEventListener('click', this.addCommentInputArea)
+    addButton?.removeEventListener('mousedown', stopPropagation)
+  }
+
+  private createButtons (): HTMLDivElement {
     const buttonContainer = document.createElement('div')
+    buttonContainer.appendChild(this.createSubmitButton())
+    buttonContainer.appendChild(this.createAddCommentButton())
+
+    return buttonContainer
+  }
+
+  private createSubmitButton (): HTMLButtonElement {
     const submitButton = document.createElement('button')
     submitButton.type = 'submit'
+    submitButton.id = 'submit-button'
     submitButton.textContent = 'Create'
-    submitButton.addEventListener('click', (e) => {
-      e.stopPropagation()
-      const radiusInput = getInputByNameAttribute(this, 'radius')
-      const dotColorInput = getInputByNameAttribute(this, 'colorHex')
 
-      const dot: Dot = {
-        x: this.dotX,
-        y: this.dotY,
-        radius: parseInt(getValueFromInput(radiusInput)),
-        colorHex: getValueFromInput(dotColorInput)
-      }
+    return submitButton
+  }
 
-      const commentInputs = Array.from(this.querySelectorAll<CommentInputArea>('div[is=comment-input-area]'))
-      const comments: Comment[] = []
-      commentInputs.forEach(el => {
-        const comment: Comment = {
-          text: getValueFromInput(getInputByNameAttribute(el, 'text')),
-          backgroundColorHex: getValueFromInput(getInputByNameAttribute(el, 'backgroundColorHex')),
-          textColorHex: getValueFromInput(getInputByNameAttribute(el, 'textColorHex'))
-        }
-        comments.push(comment)
-      })
-
-      const stickyNote: StickyNote = {
-        dot,
-        comments
-      }
-      createStickyNote(this.stage, stickyNote)
-      this.remove()
-    })
-
+  private createAddCommentButton (): HTMLButtonElement {
     const addButton = document.createElement('button')
-    addButton.textContent = 'Add'
-    let commentNumber = 0
-    addButton.addEventListener('click', (e) => {
-      e.stopPropagation()
-      commentNumber++
-      const comment = new CommentInputArea(commentNumber)
-      this.insertBefore(comment, this.children[this.children.length - 1])
+    addButton.id = 'add-comment'
+    addButton.textContent = 'Add Comment'
+
+    return addButton
+  }
+
+  private submitStickyNote (event: Event): void {
+    event.stopPropagation()
+    const dialogMenu = document.querySelector<DMNewStickyNote>(`div[is=${elementNames.DMNewStickyNote}]`)
+    if (dialogMenu !== null) {
+      const dot = dialogMenu.createDotFromInputData()
+      const comments = dialogMenu.createCommentsFromInputData()
+      createStickyNote(dialogMenu.stage, { dot, comments })
+      dialogMenu.remove()
+    }
+  }
+
+  private addCommentInputArea (event: Event): void {
+    event.stopPropagation()
+    const dialogMenu = document.querySelector<DMNewStickyNote>(`div[is=${elementNames.DMNewStickyNote}]`)
+    if (dialogMenu !== null) {
+      dialogMenu.commentNumber++
+      const commentInputArea = new CommentInputArea(dialogMenu.commentNumber)
+      dialogMenu.insertBefore(commentInputArea, dialogMenu.children[dialogMenu.children.length - 1])
+    }
+  }
+
+  private createDotFromInputData (): Dot {
+    const radiusInput = getInputByNameAttribute(this, 'radius')
+    const dotColorInput = getInputByNameAttribute(this, 'colorHex')
+
+    return {
+      x: this.dotX,
+      y: this.dotY,
+      radius: parseInt(getValueFromInput(radiusInput)),
+      colorHex: getValueFromInput(dotColorInput)
+    }
+  }
+
+  private createCommentsFromInputData (): Comment[] {
+    const commentInputs = Array.from(this.querySelectorAll<CommentInputArea>('div[is=comment-input-area]'))
+    const comments: Comment[] = []
+    commentInputs.forEach(el => {
+      const comment: Comment = this.createCommentFromInputData(el)
+      comments.push(comment)
     })
 
-    buttonContainer.appendChild(submitButton)
-    buttonContainer.appendChild(addButton)
-    this.appendChild(buttonContainer)
+    return comments
+  }
+
+  private createCommentFromInputData (input: CommentInputArea): Comment {
+    return {
+      text: getValueFromInput(getInputByNameAttribute(input, 'text')),
+      backgroundColorHex: getValueFromInput(getInputByNameAttribute(input, 'backgroundColorHex')),
+      textColorHex: getValueFromInput(getInputByNameAttribute(input, 'textColorHex'))
+    }
   }
 }
 

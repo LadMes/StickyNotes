@@ -1,4 +1,6 @@
-﻿const elementName = 'input-area'
+﻿import { stopPropagation } from '../helpers'
+
+const elementName = 'input-area'
 
 export default class InputArea extends HTMLDivElement {
   private readonly options: Options
@@ -13,13 +15,13 @@ export default class InputArea extends HTMLDivElement {
 
   connectedCallback (): void {
     for (let i = 0; i < this.children.length; i++) {
-      this.children[i].addEventListener('mousedown', this.stopPropagaiton)
+      this.children[i].addEventListener('mousedown', stopPropagation)
     }
   }
 
   disconnectedCallback (): void {
     for (let i = 0; i < this.children.length; i++) {
-      this.children[i].removeEventListener('mousedown', this.stopPropagaiton)
+      this.children[i].removeEventListener('mousedown', stopPropagation)
     }
   }
 
@@ -42,10 +44,6 @@ export default class InputArea extends HTMLDivElement {
     label.innerText = this.options.text
 
     return label
-  }
-
-  private stopPropagaiton (e: Event): void {
-    e.stopPropagation()
   }
 }
 
