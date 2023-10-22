@@ -1,9 +1,11 @@
 ﻿import InputArea from './input-area'
 
+const elementName = 'comment-input-area'
+
 export default class CommentInputArea extends HTMLDivElement {
   constructor (commentNumber: number) {
     super()
-    this.setAttribute('is', 'comment-input-area')
+    this.setAttribute('is', elementName)
     this.appendChild(new InputArea({
       type: 'text',
       name: 'text',
@@ -27,4 +29,4 @@ export default class CommentInputArea extends HTMLDivElement {
   }
 }
 
-customElements.define('comment-input-area', CommentInputArea, { extends: 'div' })
+customElements.define(elementName, CommentInputArea, { extends: 'div' })
