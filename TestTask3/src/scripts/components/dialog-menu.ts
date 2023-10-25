@@ -5,6 +5,7 @@ import { createStickyNote } from '../api-calls'
 import { type Stage } from 'konva/lib/Stage'
 import { getInputByNameAttribute, getValueFromInput, stopPropagation } from '../helpers'
 import CommentInputArea from './comment-input-area'
+import DialogMenuButton from './dialog-menu-button'
 
 /* const types: Record<string, () => DialogMenu> = {
   DMNewStickyNote: createDMNewStickyNote
@@ -131,61 +132,34 @@ export class DMNewStickyNote extends DialogMenu {
     this.appendChild(this.createButtons())
   }
 
-  connectedCallback (): void {
-    super.connectedCallback()
-
-    const submitButton = this.querySelector<HTMLButtonElement>('#submit-button')
-    submitButton?.addEventListener('click', this.submitStickyNote)
-    submitButton?.addEventListener('mousedown', stopPropagation)
-
-    const addButton = this.querySelector<HTMLButtonElement>('#add-comment')
-    addButton?.addEventListener('click', this.addCommentInputArea)
-    addButton?.addEventListener('mousedown', stopPropagation)
-  }
-
-  disconnectedCallback (): void {
-    super.disconnectedCallback()
-
-    const submitButton = this.querySelector<HTMLButtonElement>('#submit-button')
-    submitButton?.removeEventListener('click', this.submitStickyNote)
-    submitButton?.removeEventListener('mousedown', stopPropagation)
-
-    const addButton = this.querySelector<HTMLButtonElement>('#add-comment')
-    addButton?.removeEventListener('click', this.addCommentInputArea)
-    addButton?.removeEventListener('mousedown', stopPropagation)
-  }
-
   private createButtons (): HTMLDivElement {
     const buttonContainer = document.createElement('div')
-    buttonContainer.appendChild(this.createSubmitButton())
-    buttonContainer.appendChild(this.createAddCommentButton())
+    buttonContainer.appendChild(new DialogMenuButton({
+      type: 'submit',
+      id: 'submit-button',
+      textContent: 'Create'
+    }, {
+      click: this.submitStickyNote,
+      mousedown: stopPropagation
+    }))
+    buttonContainer.appendChild(new DialogMenuButton({
+      type: 'button',
+      id: 'add-comment',
+      textContent: 'Add Comment'
+    }, {
+      click: this.addCommentInputArea,
+      mousedown: stopPropagation
+    }))
 
     return buttonContainer
-  }
-
-  private createSubmitButton (): HTMLButtonElement {
-    const submitButton = document.createElement('button')
-    submitButton.type = 'submit'
-    submitButton.id = 'submit-button'
-    submitButton.textContent = 'Create'
-
-    return submitButton
-  }
-
-  private createAddCommentButton (): HTMLButtonElement {
-    const addButton = document.createElement('button')
-    addButton.id = 'add-comment'
-    addButton.textContent = 'Add Comment'
-
-    return addButton
   }
 
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
     const dialogMenu = document.querySelector<DMNewStickyNote>(`div[is=${elementNames.DMNewStickyNote}]`)
     if (dialogMenu !== null) {
-      const dot = dialogMenu.createDotFromInputData()
-      const comments = dialogMenu.createCommentsFromInputData()
+      const dot = dialogMenu.getDotFromInputData()
+      const comments = dialogMenu.getCommentsFromInputData()
       createStickyNote(dialogMenu.stage, { dot, comments })
       dialogMenu.remove()
     }
@@ -201,7 +175,7 @@ export class DMNewStickyNote extends DialogMenu {
     }
   }
 
-  private createDotFromInputData (): Dot {
+  private getDotFromInputData (): Dot {
     const radiusInput = getInputByNameAttribute(this, 'radius')
     const dotColorInput = getInputByNameAttribute(this, 'colorHex')
 
@@ -213,18 +187,18 @@ export class DMNewStickyNote extends DialogMenu {
     }
   }
 
-  private createCommentsFromInputData (): Comment[] {
+  private getCommentsFromInputData (): Comment[] {
     const commentInputs = Array.from(this.querySelectorAll<CommentInputArea>('div[is=comment-input-area]'))
     const comments: Comment[] = []
     commentInputs.forEach(el => {
-      const comment: Comment = this.createCommentFromInputData(el)
+      const comment: Comment = this.getCommentFromInputData(el)
       comments.push(comment)
     })
 
     return comments
   }
 
-  private createCommentFromInputData (input: CommentInputArea): Comment {
+  private getCommentFromInputData (input: CommentInputArea): Comment {
     return {
       text: getValueFromInput(getInputByNameAttribute(input, 'text')),
       backgroundColorHex: getValueFromInput(getInputByNameAttribute(input, 'backgroundColorHex')),

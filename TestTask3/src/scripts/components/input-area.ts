@@ -3,9 +3,9 @@
 const elementName = 'input-area'
 
 export default class InputArea extends HTMLDivElement {
-  private readonly options: Options
+  private readonly options: InputAreaOptions
 
-  constructor (options: Options) {
+  constructor (options: InputAreaOptions) {
     super()
     this.setAttribute('is', elementName)
     this.options = options
@@ -47,7 +47,7 @@ export default class InputArea extends HTMLDivElement {
   }
 }
 
-interface Options {
+interface InputAreaOptions {
   type: string
   value?: string
   name: string
