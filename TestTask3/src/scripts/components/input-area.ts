@@ -41,18 +41,18 @@ export default class InputArea extends HTMLDivElement {
   private createLabel (): HTMLLabelElement {
     const label = document.createElement('label')
     label.htmlFor = this.options.id
-    label.innerText = this.options.text
+    label.textContent = this.options.textContent
 
     return label
   }
 }
 
 interface InputAreaOptions {
-  type: string
-  value?: string
-  name: string
-  id: string
-  text: string
+  type: HTMLInputElement['type']
+  value?: HTMLInputElement['value']
+  name: HTMLInputElement['name']
+  id: HTMLInputElement['id']
+  textContent: HTMLInputElement['textContent']
 }
 
 customElements.define(elementName, InputArea, { extends: 'div' })

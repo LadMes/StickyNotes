@@ -9,20 +9,20 @@ export default class CommentInputArea extends HTMLDivElement {
     this.appendChild(new InputArea({
       type: 'text',
       name: 'text',
-      text: `Comment ${commentNumber}`,
+      textContent: `Comment ${commentNumber}`,
       id: `comment-${commentNumber}`
     }))
     this.appendChild(new InputArea({
       type: 'color',
       name: 'backgroundColorHex',
-      text: `Background Color For Comment ${commentNumber}`,
+      textContent: `Background Color For Comment ${commentNumber}`,
       value: '#FFFFFF',
       id: `background-color-${commentNumber}`
     }))
     this.appendChild(new InputArea({
       type: 'color',
       name: 'textColorHex',
-      text: `Text Color For Comment ${commentNumber}`,
+      textContent: `Text Color For Comment ${commentNumber}`,
       value: '#000000',
       id: `text-color-${commentNumber}`
     }))
