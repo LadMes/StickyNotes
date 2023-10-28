@@ -4,6 +4,7 @@ export default class DialogMenuButton extends HTMLButtonElement {
   eventsAndCallbacks: Record<string, eventCallback>
   constructor (options: DialogMenuButtonOptions, eventsAndCallbacks: Record<string, eventCallback>) {
     super()
+    this.setAttribute('is', elementName)
     this.type = options.type
     this.id = options.id
     this.textContent = options.textContent
@@ -30,9 +31,5 @@ interface DialogMenuButtonOptions {
 }
 
 type eventCallback = (event: Event) => void
-
-/* interface EventCallbacks {
-  events: eventCallback[]
-} */
 
 customElements.define(elementName, DialogMenuButton, { extends: 'button' })
