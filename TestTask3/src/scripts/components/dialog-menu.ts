@@ -105,7 +105,7 @@ abstract class DialogMenu extends HTMLDivElement {
 }
 
 export class DMNewStickyNote extends DialogMenu {
-  private readonly dialogMenu: DMNewStickyNote
+  private static dialogMenu: DMNewStickyNote
   private readonly dotX: number
   private readonly dotY: number
   private readonly stage: Stage
@@ -113,7 +113,7 @@ export class DMNewStickyNote extends DialogMenu {
 
   constructor (stage: Stage, dotX: number, dotY: number) {
     super()
-    this.dialogMenu = this
+    DMNewStickyNote.dialogMenu = this
     this.setAttribute('is', elementNames.DMNewStickyNote)
     this.dotX = dotX
     this.dotY = dotY
@@ -152,23 +152,41 @@ export class DMNewStickyNote extends DialogMenu {
       click: this.addCommentInputArea,
       mousedown: stopPropagation
     }))
+    buttonContainer.appendChild(new DialogMenuButton({
+      type: 'button',
+      id: 'delete-comment',
+      textContent: 'Remove Comment'
+    }, {
+      click: this.deleteCommentInputArea,
+      mousedown: stopPropagation
+    }))
 
     return buttonContainer
   }
 
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
-    const dot = this.dialogMenu.getDotFromInputData()
-    const comments = this.dialogMenu.getCommentsFromInputData()
-    this.dialogMenu.remove()
-    createStickyNote(this.dialogMenu.stage, { dot, comments })
+    const dot = DMNewStickyNote.dialogMenu.getDotFromInputData()
+    const comments = DMNewStickyNote.dialogMenu.getCommentsFromInputData()
+    DMNewStickyNote.dialogMenu.remove()
+    createStickyNote(DMNewStickyNote.dialogMenu.stage, { dot, comments })
   }
 
   private addCommentInputArea (event: Event): void {
     event.stopPropagation()
-    this.dialogMenu.commentNumber++
-    const commentInputArea = new CommentInputArea(this.dialogMenu.commentNumber)
-    this.dialogMenu.insertBefore(commentInputArea, this.dialogMenu.children[this.dialogMenu.children.length - 1])
+    DMNewStickyNote.dialogMenu.commentNumber++
+    const commentInputArea = new CommentInputArea(DMNewStickyNote.dialogMenu.commentNumber)
+    DMNewStickyNote.dialogMenu.insertBefore(commentInputArea,
+      DMNewStickyNote.dialogMenu.children[DMNewStickyNote.dialogMenu.children.length - 1])
+  }
+
+  private deleteCommentInputArea (event: Event): void {
+    event.stopPropagation()
+    const lastCommentInput = Array.from(DMNewStickyNote.dialogMenu.querySelectorAll<CommentInputArea>('div[is=comment-input-area]')).pop()
+    if (lastCommentInput !== undefined) {
+      DMNewStickyNote.dialogMenu.commentNumber--
+      lastCommentInput.remove()
+    }
   }
 
   private getDotFromInputData (): Dot {
