@@ -105,6 +105,7 @@ abstract class DialogMenu extends HTMLDivElement {
 }
 
 export class DMNewStickyNote extends DialogMenu {
+  private readonly dialogMenu: DMNewStickyNote
   private readonly dotX: number
   private readonly dotY: number
   private readonly stage: Stage
@@ -112,6 +113,7 @@ export class DMNewStickyNote extends DialogMenu {
 
   constructor (stage: Stage, dotX: number, dotY: number) {
     super()
+    this.dialogMenu = this
     this.setAttribute('is', elementNames.DMNewStickyNote)
     this.dotX = dotX
     this.dotY = dotY
@@ -120,19 +122,19 @@ export class DMNewStickyNote extends DialogMenu {
     this.appendChild(new InputArea({
       type: 'color',
       name: 'colorHex',
-      text: 'Select Color',
+      textContent: 'Select Color',
       id: 'colorHex'
     }))
     this.appendChild(new InputArea({
       type: 'text',
       name: 'radius',
-      text: 'Enter radius',
+      textContent: 'Enter radius',
       id: 'radius'
     }))
-    this.appendChild(this.createButtons())
+    this.appendChild(this.createButtonContainer())
   }
 
-  private createButtons (): HTMLDivElement {
+  private createButtonContainer (): HTMLDivElement {
     const buttonContainer = document.createElement('div')
     buttonContainer.appendChild(new DialogMenuButton({
       type: 'submit',
@@ -156,23 +158,17 @@ export class DMNewStickyNote extends DialogMenu {
 
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
-    const dialogMenu = document.querySelector<DMNewStickyNote>(`div[is=${elementNames.DMNewStickyNote}]`)
-    if (dialogMenu !== null) {
-      const dot = dialogMenu.getDotFromInputData()
-      const comments = dialogMenu.getCommentsFromInputData()
-      createStickyNote(dialogMenu.stage, { dot, comments })
-      dialogMenu.remove()
-    }
+    const dot = this.dialogMenu.getDotFromInputData()
+    const comments = this.dialogMenu.getCommentsFromInputData()
+    this.dialogMenu.remove()
+    createStickyNote(this.dialogMenu.stage, { dot, comments })
   }
 
   private addCommentInputArea (event: Event): void {
     event.stopPropagation()
-    const dialogMenu = document.querySelector<DMNewStickyNote>(`div[is=${elementNames.DMNewStickyNote}]`)
-    if (dialogMenu !== null) {
-      dialogMenu.commentNumber++
-      const commentInputArea = new CommentInputArea(dialogMenu.commentNumber)
-      dialogMenu.insertBefore(commentInputArea, dialogMenu.children[dialogMenu.children.length - 1])
-    }
+    this.dialogMenu.commentNumber++
+    const commentInputArea = new CommentInputArea(this.dialogMenu.commentNumber)
+    this.dialogMenu.insertBefore(commentInputArea, this.dialogMenu.children[this.dialogMenu.children.length - 1])
   }
 
   private getDotFromInputData (): Dot {
