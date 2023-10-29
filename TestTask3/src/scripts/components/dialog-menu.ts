@@ -109,7 +109,6 @@ export class DMNewStickyNote extends DialogMenu {
   private readonly dotX: number
   private readonly dotY: number
   private readonly stage: Stage
-  commentNumber: number = 0
 
   constructor (stage: Stage, dotX: number, dotY: number) {
     super()
@@ -131,7 +130,15 @@ export class DMNewStickyNote extends DialogMenu {
       textContent: 'Enter radius',
       id: 'radius'
     }))
+    this.appendChild(this.createCommentInputAreaContainer())
     this.appendChild(this.createButtonContainer())
+  }
+
+  private createCommentInputAreaContainer (): HTMLDivElement {
+    const container = document.createElement('div')
+    container.id = 'comment-input-area-container'
+
+    return container
   }
 
   private createButtonContainer (): HTMLDivElement {
@@ -174,19 +181,17 @@ export class DMNewStickyNote extends DialogMenu {
 
   private addCommentInputArea (event: Event): void {
     event.stopPropagation()
-    DMNewStickyNote.dialogMenu.commentNumber++
-    const commentInputArea = new CommentInputArea(DMNewStickyNote.dialogMenu.commentNumber)
-    DMNewStickyNote.dialogMenu.insertBefore(commentInputArea,
-      DMNewStickyNote.dialogMenu.children[DMNewStickyNote.dialogMenu.children.length - 1])
+    const container = DMNewStickyNote.dialogMenu.querySelector<HTMLDivElement>('#comment-input-area-container')
+    const commentInputAreas = this.getCommentInputAreas()
+    const newCommentInputArea = new CommentInputArea(commentInputAreas.length + 1)
+
+    container?.appendChild(newCommentInputArea)
   }
 
   private deleteCommentInputArea (event: Event): void {
     event.stopPropagation()
-    const lastCommentInput = Array.from(DMNewStickyNote.dialogMenu.querySelectorAll<CommentInputArea>('div[is=comment-input-area]')).pop()
-    if (lastCommentInput !== undefined) {
-      DMNewStickyNote.dialogMenu.commentNumber--
-      lastCommentInput.remove()
-    }
+    const lastCommentInput = Array.from(this.getCommentInputAreas()).pop()
+    lastCommentInput?.remove()
   }
 
   private getDotFromInputData (): Dot {
@@ -202,7 +207,7 @@ export class DMNewStickyNote extends DialogMenu {
   }
 
   private getCommentsFromInputData (): Comment[] {
-    const commentInputs = Array.from(this.querySelectorAll<CommentInputArea>('div[is=comment-input-area]'))
+    const commentInputs = Array.from(this.getCommentInputAreas())
     const comments: Comment[] = []
     commentInputs.forEach(el => {
       const comment: Comment = this.getCommentFromInputData(el)
@@ -218,6 +223,10 @@ export class DMNewStickyNote extends DialogMenu {
       backgroundColorHex: getValueFromInput(getInputByNameAttribute(input, 'backgroundColorHex')),
       textColorHex: getValueFromInput(getInputByNameAttribute(input, 'textColorHex'))
     }
+  }
+
+  private getCommentInputAreas (): NodeListOf<CommentInputArea> {
+    return DMNewStickyNote.dialogMenu.querySelectorAll<CommentInputArea>('div[is=comment-input-area]')
   }
 }
 
