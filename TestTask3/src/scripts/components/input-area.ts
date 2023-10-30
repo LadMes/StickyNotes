@@ -14,15 +14,11 @@ export default class InputArea extends HTMLDivElement {
   }
 
   connectedCallback (): void {
-    for (let i = 0; i < this.children.length; i++) {
-      this.children[i].addEventListener('mousedown', stopPropagation)
-    }
+    this.addEventListener('mousedown', stopPropagation)
   }
 
   disconnectedCallback (): void {
-    for (let i = 0; i < this.children.length; i++) {
-      this.children[i].removeEventListener('mousedown', stopPropagation)
-    }
+    this.removeEventListener('mousedown', stopPropagation)
   }
 
   private createInput (): HTMLInputElement {
