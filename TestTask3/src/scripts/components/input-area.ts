@@ -1,24 +1,34 @@
-﻿import { stopPropagation } from '../helpers'
+﻿import { type eventCallback, stopPropagation } from '../helpers'
 
 const elementName = 'input-area'
 
 export default class InputArea extends HTMLDivElement {
   private readonly options: InputAreaOptions
+  private readonly inputEvents: Record<string, eventCallback>
 
-  constructor (options: InputAreaOptions) {
+  constructor (options: InputAreaOptions, inputEvents?: Record<string, eventCallback>) {
     super()
     this.setAttribute('is', elementName)
     this.options = options
+    if (inputEvents !== undefined) {
+      this.inputEvents = inputEvents
+    }
     this.appendChild(this.createLabel())
     this.appendChild(this.createInput())
   }
 
   connectedCallback (): void {
     this.addEventListener('mousedown', stopPropagation)
+    for (const event in this.inputEvents) {
+      this.addEventListener(event, this.inputEvents[event])
+    }
   }
 
   disconnectedCallback (): void {
     this.removeEventListener('mousedown', stopPropagation)
+    for (const event in this.inputEvents) {
+      this.removeEventListener(event, this.inputEvents[event])
+    }
   }
 
   private createInput (): HTMLInputElement {
