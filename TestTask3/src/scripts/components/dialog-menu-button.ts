@@ -1,25 +1,28 @@
-﻿const elementName = 'dialog-menu-button'
+﻿import { type eventCallback } from '../helpers'
+
+const elementName = 'dialog-menu-button'
 
 export default class DialogMenuButton extends HTMLButtonElement {
-  eventsAndCallbacks: Record<string, eventCallback>
-  constructor (options: DialogMenuButtonOptions, eventsAndCallbacks: Record<string, eventCallback>) {
+  buttonEvents: Record<string, eventCallback>
+
+  constructor (options: DialogMenuButtonOptions, buttonEvents: Record<string, eventCallback>) {
     super()
     this.setAttribute('is', elementName)
     this.type = options.type
     this.id = options.id
     this.textContent = options.textContent
-    this.eventsAndCallbacks = eventsAndCallbacks
+    this.buttonEvents = buttonEvents
   }
 
   connectedCallback (): void {
-    for (const event in this.eventsAndCallbacks) {
-      this.addEventListener(event, this.eventsAndCallbacks[event])
+    for (const event in this.buttonEvents) {
+      this.addEventListener(event, this.buttonEvents[event])
     }
   }
 
   disconnectedCallback (): void {
-    for (const event in this.eventsAndCallbacks) {
-      this.removeEventListener(event, this.eventsAndCallbacks[event])
+    for (const event in this.buttonEvents) {
+      this.removeEventListener(event, this.buttonEvents[event])
     }
   }
 }
@@ -29,7 +32,5 @@ interface DialogMenuButtonOptions {
   id: HTMLButtonElement['id']
   textContent: HTMLButtonElement['textContent']
 }
-
-type eventCallback = (event: Event) => void
 
 customElements.define(elementName, DialogMenuButton, { extends: 'button' })
