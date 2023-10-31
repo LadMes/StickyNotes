@@ -94,7 +94,7 @@ abstract class DialogMenu extends HTMLDivElement {
     const closeIcon = document.createElement('img')
     closeIcon.src = '../close_icon.png'
     closeIcon.classList.add('close-icon')
-    closeIcon.addEventListener('click', this.removeDialogMenu)
+    closeIcon.addEventListener('click', this.removeDialogMenu, { once: true })
 
     return closeIcon
   }
@@ -109,6 +109,7 @@ export class DMNewStickyNote extends DialogMenu {
   private readonly dotX: number
   private readonly dotY: number
   private readonly stage: Stage
+  private status: boolean = false
 
   constructor (stage: Stage, dotX: number, dotY: number) {
     super()
@@ -129,9 +130,23 @@ export class DMNewStickyNote extends DialogMenu {
       name: 'radius',
       textContent: 'Enter radius',
       id: 'radius'
+    }, {
+      input: this.checkRadius
     }))
     this.appendChild(this.createCommentInputAreaContainer())
     this.appendChild(this.createButtonContainer())
+  }
+
+  private checkRadius (event: Event): void {
+    const input = this.querySelector<HTMLInputElement>('input')
+    const value = parseInt(getValueFromInput(input))
+    if (isNaN(value) || value <= 0 || value > 100) {
+      input?.classList.add('input-error')
+      DMNewStickyNote.dialogMenu.status = false
+    } else {
+      input?.classList.remove('input-error')
+      DMNewStickyNote.dialogMenu.status = true
+    }
   }
 
   private createCommentInputAreaContainer (): HTMLDivElement {
@@ -173,16 +188,18 @@ export class DMNewStickyNote extends DialogMenu {
 
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
-    const dot = DMNewStickyNote.dialogMenu.getDotFromInputData()
-    const comments = DMNewStickyNote.dialogMenu.getCommentsFromInputData()
-    DMNewStickyNote.dialogMenu.remove()
-    createStickyNote(DMNewStickyNote.dialogMenu.stage, { dot, comments })
+    if (DMNewStickyNote.dialogMenu.status) {
+      const dot = DMNewStickyNote.dialogMenu.getDotFromInputData()
+      const comments = DMNewStickyNote.dialogMenu.getCommentsFromInputData()
+      DMNewStickyNote.dialogMenu.remove()
+      createStickyNote(DMNewStickyNote.dialogMenu.stage, { dot, comments })
+    }
   }
 
   private addCommentInputArea (event: Event): void {
     event.stopPropagation()
     const container = DMNewStickyNote.dialogMenu.querySelector<HTMLDivElement>('#comment-input-area-container')
-    const commentInputAreas = this.getCommentInputAreas()
+    const commentInputAreas = DMNewStickyNote.dialogMenu.getCommentInputAreas()
     const newCommentInputArea = new CommentInputArea(commentInputAreas.length + 1)
 
     container?.appendChild(newCommentInputArea)
@@ -190,7 +207,7 @@ export class DMNewStickyNote extends DialogMenu {
 
   private deleteCommentInputArea (event: Event): void {
     event.stopPropagation()
-    const lastCommentInput = Array.from(this.getCommentInputAreas()).pop()
+    const lastCommentInput = Array.from(DMNewStickyNote.dialogMenu.getCommentInputAreas()).pop()
     lastCommentInput?.remove()
   }
 
