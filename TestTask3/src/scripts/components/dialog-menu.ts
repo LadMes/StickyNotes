@@ -104,12 +104,13 @@ abstract class DialogMenu extends HTMLDivElement {
   }
 }
 
+// TO-DO: Try composition instead inheritance
 export class DMNewStickyNote extends DialogMenu {
   private static dialogMenu: DMNewStickyNote
   private readonly dotX: number
   private readonly dotY: number
   private readonly stage: Stage
-  private status: boolean = false
+  private isModelValid: boolean = false
 
   constructor (stage: Stage, dotX: number, dotY: number) {
     super()
@@ -138,14 +139,15 @@ export class DMNewStickyNote extends DialogMenu {
   }
 
   private checkRadius (event: Event): void {
-    const input = this.querySelector<HTMLInputElement>('input')
-    const value = parseInt(getValueFromInput(input))
-    if (isNaN(value) || value <= 0 || value > 100) {
-      input?.classList.add('input-error')
-      DMNewStickyNote.dialogMenu.status = false
-    } else {
-      input?.classList.remove('input-error')
-      DMNewStickyNote.dialogMenu.status = true
+    if (this instanceof HTMLInputElement) {
+      const value = parseInt(getValueFromInput(this))
+      if (isNaN(value) || value <= 0 || value > 100) {
+        this.classList.add('input-error')
+        DMNewStickyNote.dialogMenu.isModelValid = false
+      } else {
+        this.classList.remove('input-error')
+        DMNewStickyNote.dialogMenu.isModelValid = true
+      }
     }
   }
 
@@ -188,7 +190,7 @@ export class DMNewStickyNote extends DialogMenu {
 
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
-    if (DMNewStickyNote.dialogMenu.status) {
+    if (DMNewStickyNote.dialogMenu.isModelValid) {
       const dot = DMNewStickyNote.dialogMenu.getDotFromInputData()
       const comments = DMNewStickyNote.dialogMenu.getCommentsFromInputData()
       DMNewStickyNote.dialogMenu.remove()

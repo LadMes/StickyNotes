@@ -19,8 +19,9 @@ export default class InputArea extends HTMLDivElement {
 
   connectedCallback (): void {
     this.addEventListener('mousedown', stopPropagation)
+    const input = this.querySelector<HTMLInputElement>('input')
     for (const event in this.inputEvents) {
-      this.addEventListener(event, this.inputEvents[event])
+      input?.addEventListener(event, this.inputEvents[event])
     }
   }
 
