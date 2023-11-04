@@ -2,28 +2,9 @@
 import type Dot from '../models/dot'
 import type Comment from '../models/comment'
 import { createStickyNote } from '../api-calls'
-import { type Stage } from 'konva/lib/Stage'
 import { getInputByNameAttribute, getValueFromInput, stopPropagation } from '../helpers'
 import CommentInputArea from './comment-input-area'
 import DialogMenuButton from './dialog-menu-button'
-
-/* const types: Record<string, () => DialogMenu> = {
-  DMNewStickyNote: createDMNewStickyNote
-}
-
-export default function createDialogMenu (type: string): DialogMenu {
-  try {
-    return types[type]()
-  } catch (err) {
-    console.log(err)
-    // TODO: Add Default DM
-    return createDMNewStickyNote()
-  }
-}
-
-function createDMNewStickyNote (): DialogMenu {
-  return new DMNewStickyNote()
-} */
 
 const elementNames = {
   DMNewStickyNote: 'dialog-menu-new-sticky-note'
@@ -104,21 +85,19 @@ abstract class DialogMenu extends HTMLDivElement {
   }
 }
 
-// TO-DO: Try composition instead inheritance
+// TO-DO: Try composition instead of inheritance
 export class DMNewStickyNote extends DialogMenu {
   private static dialogMenu: DMNewStickyNote
   private readonly dotX: number
   private readonly dotY: number
-  private readonly stage: Stage
   private isModelValid: boolean = false
 
-  constructor (stage: Stage, dotX: number, dotY: number) {
+  constructor (dotX: number, dotY: number) {
     super()
     DMNewStickyNote.dialogMenu = this
     this.setAttribute('is', elementNames.DMNewStickyNote)
     this.dotX = dotX
     this.dotY = dotY
-    this.stage = stage
     this.classList.add('dialog-menu-new-sticky-note')
     this.appendChild(new InputArea({
       type: 'color',
@@ -194,7 +173,7 @@ export class DMNewStickyNote extends DialogMenu {
       const dot = DMNewStickyNote.dialogMenu.getDotFromInputData()
       const comments = DMNewStickyNote.dialogMenu.getCommentsFromInputData()
       DMNewStickyNote.dialogMenu.remove()
-      createStickyNote(DMNewStickyNote.dialogMenu.stage, { dot, comments })
+      createStickyNote({ dot, comments })
     }
   }
 

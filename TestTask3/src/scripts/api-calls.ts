@@ -1,21 +1,20 @@
 ﻿import type StickyNoteElement from './models/sticky-note'
 import { type StickyNote } from './models/sticky-note'
-import { type Stage } from 'konva/lib/Stage'
-import { showStickyNote, showStickyNotes } from './helpers'
+import { showStickyNote, showStickyNotes } from './sticky-notes-stage'
 
 const apiURL = 'api/StickyNotes'
 
-export function getStickyNotes (stage: Stage): void {
+export function getStickyNotes (): void {
   fetch(apiURL).then(async res => {
     return await res.json()
   }).then((stickyNotes: StickyNote[]) => {
-    showStickyNotes(stage, stickyNotes)
+    showStickyNotes(stickyNotes)
   }).catch((err) => {
     console.log(err)
   })
 }
 
-export function createStickyNote (stage: Stage, stickyNote: StickyNote): void {
+export function createStickyNote (stickyNote: StickyNote): void {
   fetch(apiURL, {
     method: 'POST',
     headers: {
@@ -25,7 +24,7 @@ export function createStickyNote (stage: Stage, stickyNote: StickyNote): void {
   }).then(async res => {
     return await res.json()
   }).then((stickyNote: StickyNote) => {
-    showStickyNote(stage, stickyNote)
+    showStickyNote(stickyNote)
   })
     .catch((err) => {
       console.log(err)
