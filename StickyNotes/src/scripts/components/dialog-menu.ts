@@ -4,7 +4,7 @@ import type Comment from '../models/comment'
 import { createStickyNote } from '../api-calls'
 import { getInputByNameAttribute, getValueFromInput, stopPropagation } from '../helpers'
 import CommentInputArea from './comment-input-area'
-import DialogMenuButton from './dialog-menu-button'
+import DialogMenuButton from './dialog-button'
 
 const elementNames = {
   NewStickyNoteDialog: 'new-sticky-note-dialog'
