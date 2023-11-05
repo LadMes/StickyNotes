@@ -22,11 +22,8 @@ abstract class DialogMenu extends HTMLDivElement {
   }
 
   connectedCallback (): void {
-    const top = window.innerHeight / 2 - this.offsetHeight / 2
-    this.style.top = top < 0 ? '0px' : top.toString() + 'px'
-
-    const left = window.innerWidth / 2 - this.offsetWidth / 2
-    this.style.left = left < 0 ? '0px' : left.toString() + 'px'
+    this.style.top = this.calculateCoord(window.innerHeight, this.offsetHeight)
+    this.style.left = this.calculateCoord(window.innerWidth, this.offsetWidth)
 
     this.addEventListener('mousedown', this.mousedown)
     this.addEventListener('mousemove', this.mousemove)
@@ -37,6 +34,10 @@ abstract class DialogMenu extends HTMLDivElement {
     this.removeEventListener('mousedown', this.mousedown)
     this.removeEventListener('mousemove', this.mousemove)
     this.removeEventListener('mouseup', this.mouseup)
+  }
+
+  private calculateCoord (windowSideSize: number, dialogSideSize: number): string {
+    return Math.max(0, windowSideSize / 2 - dialogSideSize / 2).toString() + 'px'
   }
 
   private mousedown (e: MouseEvent): void {
