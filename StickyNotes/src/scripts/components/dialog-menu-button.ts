@@ -8,9 +8,7 @@ export default class DialogMenuButton extends HTMLButtonElement {
   constructor (options: DialogMenuButtonOptions, buttonEvents: Record<string, eventCallback>) {
     super()
     this.setAttribute('is', elementName)
-    this.type = options.type
-    this.id = options.id
-    this.textContent = options.textContent
+    Object.assign(this, options)
     this.buttonEvents = buttonEvents
   }
 

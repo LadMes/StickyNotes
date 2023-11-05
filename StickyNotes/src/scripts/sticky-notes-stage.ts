@@ -1,6 +1,6 @@
 ﻿import Konva from 'konva'
 import StickyNoteElement, { type StickyNote } from './models/sticky-note'
-import { DMNewStickyNote } from './components/dialog-menu'
+import { NewStickyNoteDialog } from './components/dialog-menu'
 
 const stage = new Konva.Stage({
   container: 'container',
@@ -12,7 +12,7 @@ stage.add(new Konva.Layer())
 
 stage.addEventListener('click', (e: PointerEvent) => {
   if (e.button === 0 && document.getElementsByClassName('dialog-menu').length === 0) {
-    document.body.append(new DMNewStickyNote(e.pageX, e.pageY))
+    document.body.append(new NewStickyNoteDialog(e.pageX, e.pageY))
   }
 })
 
