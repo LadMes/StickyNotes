@@ -7,10 +7,11 @@ import CommentInputArea from './comment-input-area'
 import DialogMenuButton from './dialog-button'
 
 const elementNames = {
+  DialogMenu: 'dialog-menu',
   NewStickyNoteDialog: 'new-sticky-note-dialog'
 }
 
-abstract class DialogMenu extends HTMLDivElement {
+class DialogMenu extends HTMLElement {
   private isMoving: boolean = false
   private currentX: number
   private currentY: number
@@ -96,7 +97,6 @@ export class NewStickyNoteDialog extends DialogMenu {
   constructor (dotX: number, dotY: number) {
     super()
     NewStickyNoteDialog.dialogMenu = this
-    this.setAttribute('is', elementNames.NewStickyNoteDialog)
     this.dotX = dotX
     this.dotY = dotY
     this.classList.add('dialog-menu-new-sticky-note')
@@ -229,4 +229,5 @@ export class NewStickyNoteDialog extends DialogMenu {
   }
 }
 
-customElements.define(elementNames.NewStickyNoteDialog, NewStickyNoteDialog, { extends: 'div' })
+customElements.define(elementNames.DialogMenu, DialogMenu)
+customElements.define(elementNames.NewStickyNoteDialog, NewStickyNoteDialog)
