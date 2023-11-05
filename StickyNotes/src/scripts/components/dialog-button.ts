@@ -5,7 +5,7 @@ const elementName = 'dialog-menu-button'
 export default class DialogMenuButton extends HTMLButtonElement {
   buttonEvents: Record<string, eventCallback>
 
-  constructor (options: DialogMenuButtonOptions, buttonEvents: Record<string, eventCallback>) {
+  constructor (options: ButtonProps, buttonEvents: Record<string, eventCallback>) {
     super()
     this.setAttribute('is', elementName)
     Object.assign(this, options)
@@ -25,7 +25,7 @@ export default class DialogMenuButton extends HTMLButtonElement {
   }
 }
 
-interface DialogMenuButtonOptions {
+interface ButtonProps {
   type: HTMLButtonElement['type']
   id: HTMLButtonElement['id']
   textContent: HTMLButtonElement['textContent']
