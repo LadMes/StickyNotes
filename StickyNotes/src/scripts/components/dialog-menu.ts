@@ -7,7 +7,7 @@ import CommentInputArea from './comment-input-area'
 import DialogMenuButton from './dialog-menu-button'
 
 const elementNames = {
-  NewStickyNoteDialog: 'dialog-menu-new-sticky-note'
+  NewStickyNoteDialog: 'new-sticky-note-dialog'
 }
 
 abstract class DialogMenu extends HTMLDivElement {
