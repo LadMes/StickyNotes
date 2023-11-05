@@ -89,14 +89,16 @@ class DialogMenu extends HTMLElement {
 
 // TO-DO: Try composition instead of inheritance
 export class NewStickyNoteDialog extends DialogMenu {
-  private static dialogMenu: NewStickyNoteDialog
   private readonly dotX: number
   private readonly dotY: number
   private isModelValid: boolean = false
 
   constructor (dotX: number, dotY: number) {
     super()
-    NewStickyNoteDialog.dialogMenu = this
+    this.checkRadius = this.checkRadius.bind(this)
+    this.submitStickyNote = this.submitStickyNote.bind(this)
+    this.addCommentInputArea = this.addCommentInputArea.bind(this)
+    this.deleteCommentInputArea = this.deleteCommentInputArea.bind(this)
     this.dotX = dotX
     this.dotY = dotY
     this.classList.add('dialog-menu-new-sticky-note')
@@ -119,15 +121,14 @@ export class NewStickyNoteDialog extends DialogMenu {
   }
 
   private checkRadius (event: Event): void {
-    if (this instanceof HTMLInputElement) {
-      const value = parseInt(getValueFromInput(this))
-      if (isNaN(value) || value <= 0 || value > 100) {
-        this.classList.add('input-error')
-        NewStickyNoteDialog.dialogMenu.isModelValid = false
-      } else {
-        this.classList.remove('input-error')
-        NewStickyNoteDialog.dialogMenu.isModelValid = true
-      }
+    const radiusInpunt = getInputByNameAttribute(this, 'radius')
+    const value = parseInt(getValueFromInput(radiusInpunt))
+    if (isNaN(value) || value <= 0 || value > 100) {
+      radiusInpunt?.classList.add('input-error')
+      this.isModelValid = false
+    } else {
+      radiusInpunt?.classList.remove('input-error')
+      this.isModelValid = true
     }
   }
 
@@ -170,18 +171,18 @@ export class NewStickyNoteDialog extends DialogMenu {
 
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
-    if (NewStickyNoteDialog.dialogMenu.isModelValid) {
-      const dot = NewStickyNoteDialog.dialogMenu.getDotFromInputData()
-      const comments = NewStickyNoteDialog.dialogMenu.getCommentsFromInputData()
-      NewStickyNoteDialog.dialogMenu.remove()
+    if (this.isModelValid) {
+      const dot = this.getDotFromInputData()
+      const comments = this.getCommentsFromInputData()
+      this.remove()
       createStickyNote({ dot, comments })
     }
   }
 
   private addCommentInputArea (event: Event): void {
     event.stopPropagation()
-    const container = NewStickyNoteDialog.dialogMenu.querySelector<HTMLDivElement>('#comment-input-area-container')
-    const commentInputAreas = NewStickyNoteDialog.dialogMenu.getCommentInputAreas()
+    const container = this.querySelector<HTMLDivElement>('#comment-input-area-container')
+    const commentInputAreas = this.getCommentInputAreas()
     const newCommentInputArea = new CommentInputArea(commentInputAreas.length + 1)
 
     container?.appendChild(newCommentInputArea)
@@ -189,7 +190,7 @@ export class NewStickyNoteDialog extends DialogMenu {
 
   private deleteCommentInputArea (event: Event): void {
     event.stopPropagation()
-    const lastCommentInput = Array.from(NewStickyNoteDialog.dialogMenu.getCommentInputAreas()).pop()
+    const lastCommentInput = Array.from(this.getCommentInputAreas()).pop()
     lastCommentInput?.remove()
   }
 
@@ -225,7 +226,7 @@ export class NewStickyNoteDialog extends DialogMenu {
   }
 
   private getCommentInputAreas (): NodeListOf<CommentInputArea> {
-    return NewStickyNoteDialog.dialogMenu.querySelectorAll<CommentInputArea>('div[is=comment-input-area]')
+    return this.querySelectorAll<CommentInputArea>('div[is=comment-input-area]')
   }
 }
 
