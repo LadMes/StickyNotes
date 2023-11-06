@@ -18,6 +18,7 @@ class DialogMenu extends HTMLElement {
 
   constructor () {
     super()
+    this.removeDialogMenu = this.removeDialogMenu.bind(this)
     this.classList.add('dialog-menu')
     this.appendChild(this.createCloseIcon())
   }
@@ -38,7 +39,7 @@ class DialogMenu extends HTMLElement {
   }
 
   private calculateCoordInPx (windowSideSize: number, dialogSideSize: number): string {
-    return Math.max(0, windowSideSize / 2 - dialogSideSize / 2).toString() + 'px'
+    return Math.max(0, (windowSideSize - dialogSideSize) / 2).toString() + 'px'
   }
 
   private mousedown (e: MouseEvent): void {
@@ -50,19 +51,8 @@ class DialogMenu extends HTMLElement {
 
   private mousemove (e: MouseEvent): void {
     if (this.isMoving) {
-      const currentLeft = parseInt(this.style.left)
-      let nextLeft = currentLeft - (this.currentX - e.offsetX)
-      if (nextLeft < 0) {
-        nextLeft = 0
-      }
-      this.style.left = nextLeft.toString() + 'px'
-
-      const currentTop = parseInt(this.style.top)
-      let nextTop = currentTop - (this.currentY - e.offsetY)
-      if (nextTop < 0) {
-        nextTop = 0
-      }
-      this.style.top = nextTop.toString() + 'px'
+      this.style.left = this.calculateNewCornerCoordInPx(parseInt(this.style.left), this.currentX, e.offsetX)
+      this.style.top = this.calculateNewCornerCoordInPx(parseInt(this.style.top), this.currentY, e.offsetY)
     }
   }
 
@@ -71,6 +61,12 @@ class DialogMenu extends HTMLElement {
       this.style.cursor = 'default'
       this.isMoving = false
     }
+  }
+
+  private calculateNewCornerCoordInPx (currentCornerCoord: number,
+    currentMouseCoord: number, nextMouseCoord: number): string {
+    return Math.max(0, currentCornerCoord - (currentMouseCoord - nextMouseCoord))
+      .toString() + 'px'
   }
 
   private createCloseIcon (): HTMLImageElement {
@@ -83,7 +79,7 @@ class DialogMenu extends HTMLElement {
   }
 
   private removeDialogMenu (): void {
-    this.parentElement?.remove()
+    this.remove()
   }
 }
 
