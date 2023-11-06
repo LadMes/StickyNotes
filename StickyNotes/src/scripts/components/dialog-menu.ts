@@ -23,8 +23,8 @@ class DialogMenu extends HTMLElement {
   }
 
   connectedCallback (): void {
-    this.style.top = this.calculateCoord(window.innerHeight, this.offsetHeight)
-    this.style.left = this.calculateCoord(window.innerWidth, this.offsetWidth)
+    this.style.top = this.calculateCoordPx(window.innerHeight, this.offsetHeight)
+    this.style.left = this.calculateCoordPx(window.innerWidth, this.offsetWidth)
 
     this.addEventListener('mousedown', this.mousedown)
     this.addEventListener('mousemove', this.mousemove)
@@ -37,7 +37,7 @@ class DialogMenu extends HTMLElement {
     this.removeEventListener('mouseup', this.mouseup)
   }
 
-  private calculateCoord (windowSideSize: number, dialogSideSize: number): string {
+  private calculateCoordPx (windowSideSize: number, dialogSideSize: number): string {
     return Math.max(0, windowSideSize / 2 - dialogSideSize / 2).toString() + 'px'
   }
 
