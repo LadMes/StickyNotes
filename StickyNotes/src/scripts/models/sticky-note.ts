@@ -1,4 +1,4 @@
-﻿import type Dot from './dot'
+﻿import Dot from './dot'
 import DotImage from '../components/dot-image'
 import type Comment from '../models/comment'
 import CommentContainer from '../components/comment-container'
@@ -42,8 +42,13 @@ export default class StickyNoteElement {
   }
 }
 
-export interface StickyNote {
+export class StickyNote {
   id?: number
   dot: Dot
   comments: Comment[]
+
+  constructor () {
+    this.dot = new Dot()
+    this.comments = []
+  }
 }
