@@ -1,10 +1,9 @@
 ﻿import InputArea from './input-area'
-import type Dot from '../models/dot'
-import type Comment from '../models/comment'
 import { createStickyNote } from '../api-calls'
 import { getInputByNameAttribute, getValueFromInput, stopPropagation } from '../helpers'
 import CommentInputArea from './comment-input-area'
 import DialogMenuButton from './dialog-button'
+import { StickyNote } from '../models/sticky-note'
 
 const elementNames = {
   DialogMenu: 'dialog-menu',
@@ -85,24 +84,28 @@ class DialogMenu extends HTMLElement {
 
 // TO-DO: Try composition instead of inheritance
 export class NewStickyNoteDialog extends DialogMenu {
-  private readonly dotX: number
-  private readonly dotY: number
+  private readonly stickyNote: StickyNote
   private isModelValid: boolean = false
 
   constructor (dotX: number, dotY: number) {
     super()
-    this.checkRadius = this.checkRadius.bind(this)
+    this.handleRadiusChange = this.handleRadiusChange.bind(this)
+    this.handleColorHexChange = this.handleColorHexChange.bind(this)
     this.submitStickyNote = this.submitStickyNote.bind(this)
     this.addCommentInputArea = this.addCommentInputArea.bind(this)
     this.deleteCommentInputArea = this.deleteCommentInputArea.bind(this)
-    this.dotX = dotX
-    this.dotY = dotY
+    this.stickyNote = new StickyNote()
+    this.stickyNote.dot.x = dotX
+    this.stickyNote.dot.y = dotY
     this.classList.add('dialog-menu-new-sticky-note')
     this.appendChild(new InputArea({
       type: 'color',
       name: 'colorHex',
       textContent: 'Select Color',
-      id: 'colorHex'
+      id: 'colorHex',
+      value: this.stickyNote.dot.colorHex
+    }, {
+      input: this.handleColorHexChange
     }))
     this.appendChild(new InputArea({
       type: 'text',
@@ -110,19 +113,26 @@ export class NewStickyNoteDialog extends DialogMenu {
       textContent: 'Enter radius',
       id: 'radius'
     }, {
-      input: this.checkRadius
+      input: this.handleRadiusChange
     }))
     this.appendChild(this.createCommentInputAreaContainer())
     this.appendChild(this.createButtonContainer())
   }
 
-  private checkRadius (event: Event): void {
+  private handleColorHexChange (event: Event): void {
+    if (event.target instanceof HTMLInputElement) {
+      this.stickyNote.dot.colorHex = event.target.value
+    }
+  }
+
+  private handleRadiusChange (event: Event): void {
     const radiusInpunt = getInputByNameAttribute(this, 'radius')
     const value = parseInt(getValueFromInput(radiusInpunt))
     if (isNaN(value) || value <= 0 || value > 100) {
       radiusInpunt?.classList.add('input-error')
       this.isModelValid = false
     } else {
+      this.stickyNote.dot.radius = value
       radiusInpunt?.classList.remove('input-error')
       this.isModelValid = true
     }
@@ -168,18 +178,17 @@ export class NewStickyNoteDialog extends DialogMenu {
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
     if (this.isModelValid) {
-      const dot = this.getDotFromInputData()
-      const comments = this.getCommentsFromInputData()
       this.remove()
-      createStickyNote({ dot, comments })
+      createStickyNote(this.stickyNote)
     }
   }
 
   private addCommentInputArea (event: Event): void {
     event.stopPropagation()
     const container = this.querySelector<HTMLDivElement>('#comment-input-area-container')
-    const commentInputAreas = this.getCommentInputAreas()
-    const newCommentInputArea = new CommentInputArea(commentInputAreas.length + 1)
+    const commentNumber = this.getCommentInputAreas().length + 1
+    const newCommentInputArea = new CommentInputArea(commentNumber)
+    this.stickyNote.comments.push(newCommentInputArea.comment)
 
     container?.appendChild(newCommentInputArea)
   }
@@ -188,37 +197,6 @@ export class NewStickyNoteDialog extends DialogMenu {
     event.stopPropagation()
     const lastCommentInput = Array.from(this.getCommentInputAreas()).pop()
     lastCommentInput?.remove()
-  }
-
-  private getDotFromInputData (): Dot {
-    const radiusInput = getInputByNameAttribute(this, 'radius')
-    const dotColorInput = getInputByNameAttribute(this, 'colorHex')
-
-    return {
-      x: this.dotX,
-      y: this.dotY,
-      radius: parseInt(getValueFromInput(radiusInput)),
-      colorHex: getValueFromInput(dotColorInput)
-    }
-  }
-
-  private getCommentsFromInputData (): Comment[] {
-    const commentInputs = Array.from(this.getCommentInputAreas())
-    const comments: Comment[] = []
-    commentInputs.forEach(el => {
-      const comment: Comment = this.getCommentFromInputData(el)
-      comments.push(comment)
-    })
-
-    return comments
-  }
-
-  private getCommentFromInputData (input: CommentInputArea): Comment {
-    return {
-      text: getValueFromInput(getInputByNameAttribute(input, 'text')),
-      backgroundColorHex: getValueFromInput(getInputByNameAttribute(input, 'backgroundColorHex')),
-      textColorHex: getValueFromInput(getInputByNameAttribute(input, 'textColorHex'))
-    }
   }
 
   private getCommentInputAreas (): NodeListOf<CommentInputArea> {
