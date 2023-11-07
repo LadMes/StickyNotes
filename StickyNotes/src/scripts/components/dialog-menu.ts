@@ -134,14 +134,14 @@ export class NewStickyNoteDialog extends DialogMenu {
   }
 
   private handleRadiusChange (event: Event): void {
-    const radiusInpunt = getInputByNameAttribute(this, 'radius')
-    const value = parseInt(getValueFromInput(radiusInpunt))
+    const radiusInput = getInputByNameAttribute(this, 'radius')
+    const value = parseInt(getValueFromInput(radiusInput))
     if (isNaN(value) || value <= 0 || value > 100) {
-      radiusInpunt?.classList.add('input-error')
+      radiusInput?.classList.add('input-error')
       this.isModelValid = false
     } else {
       this.stickyNote.dot.radius = value
-      radiusInpunt?.classList.remove('input-error')
+      radiusInput?.classList.remove('input-error')
       this.isModelValid = true
     }
   }
@@ -196,8 +196,8 @@ export class NewStickyNoteDialog extends DialogMenu {
     const container = this.querySelector<HTMLDivElement>('#comment-input-area-container')
     const commentNumber = this.getCommentInputAreas().length + 1
     const newCommentInputArea = new CommentInputArea(commentNumber)
-    this.stickyNote.comments.push(newCommentInputArea.comment)
 
+    this.stickyNote.comments.push(newCommentInputArea.comment)
     container?.appendChild(newCommentInputArea)
   }
 
