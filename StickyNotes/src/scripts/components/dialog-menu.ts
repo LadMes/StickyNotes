@@ -99,19 +99,27 @@ export class NewStickyNoteDialog extends DialogMenu {
     this.stickyNote.dot.y = dotY
     this.classList.add('dialog-menu-new-sticky-note')
     this.appendChild(new InputArea({
-      type: 'color',
-      name: 'colorHex',
-      textContent: 'Select Color',
-      id: 'colorHex',
-      value: this.stickyNote.dot.colorHex
+      inputProps: {
+        type: 'color',
+        name: 'colorHex',
+        id: 'colorHex',
+        value: this.stickyNote.dot.colorHex
+      },
+      labelProps: {
+        textContent: 'Select Color'
+      }
     }, {
       input: this.handleColorHexChange
     }))
     this.appendChild(new InputArea({
-      type: 'text',
-      name: 'radius',
-      textContent: 'Enter radius',
-      id: 'radius'
+      inputProps: {
+        type: 'text',
+        name: 'radius',
+        id: 'radius'
+      },
+      labelProps: {
+        textContent: 'Enter radius'
+      }
     }, {
       input: this.handleRadiusChange
     }))

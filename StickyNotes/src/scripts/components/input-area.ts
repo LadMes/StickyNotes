@@ -3,13 +3,13 @@
 const elementName = 'input-area'
 
 export default class InputArea extends HTMLDivElement {
-  private readonly options: InputAreaOptions
+  private readonly props: InputAreaProps
   private readonly inputEvents: Record<string, eventCallback>
 
-  constructor (options: InputAreaOptions, inputEvents?: Record<string, eventCallback>) {
+  constructor (props: InputAreaProps, inputEvents?: Record<string, eventCallback>) {
     super()
     this.setAttribute('is', elementName)
-    this.options = options
+    this.props = props
     if (inputEvents !== undefined) {
       this.inputEvents = inputEvents
     }
@@ -34,32 +34,34 @@ export default class InputArea extends HTMLDivElement {
 
   private createInput (): HTMLInputElement {
     const input = document.createElement('input')
-    input.type = this.options.type
-    input.name = this.options.name
-    input.id = this.options.id
-
-    if (this.options.value !== undefined) {
-      input.setAttribute('value', this.options.value)
-    }
+    Object.assign(input, this.props.inputProps)
 
     return input
   }
 
   private createLabel (): HTMLLabelElement {
     const label = document.createElement('label')
-    label.htmlFor = this.options.id
-    label.textContent = this.options.textContent
+    Object.assign(label, this.props.labelProps)
+    label.htmlFor = this.props.inputProps.id
 
     return label
   }
 }
 
-interface InputAreaOptions {
+interface InputAreaProps {
+  inputProps: InputProps
+  labelProps: LabelProps
+}
+
+interface InputProps {
   type: HTMLInputElement['type']
   value?: HTMLInputElement['value']
   name: HTMLInputElement['name']
   id: HTMLInputElement['id']
-  textContent: HTMLInputElement['textContent']
+}
+
+interface LabelProps {
+  textContent: HTMLLabelElement['textContent']
 }
 
 customElements.define(elementName, InputArea, { extends: 'div' })

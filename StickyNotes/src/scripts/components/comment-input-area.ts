@@ -14,28 +14,40 @@ export default class CommentInputArea extends HTMLDivElement {
     this.handleTextColorHexChange = this.handleTextColorHexChange.bind(this)
     this.setAttribute('is', elementName)
     this.appendChild(new InputArea({
-      type: 'text',
-      name: 'text',
-      textContent: `Comment ${commentNumber}`,
-      id: `comment-${commentNumber}`
+      inputProps: {
+        type: 'text',
+        name: 'text',
+        id: `comment-${commentNumber}`
+      },
+      labelProps: {
+        textContent: `Comment ${commentNumber}`
+      }
     }, {
       input: this.handleTextChange
     }))
     this.appendChild(new InputArea({
-      type: 'color',
-      name: 'backgroundColorHex',
-      textContent: `Background Color For Comment ${commentNumber}`,
-      value: '#FFFFFF',
-      id: `background-color-${commentNumber}`
+      inputProps: {
+        type: 'color',
+        name: 'backgroundColorHex',
+        value: '#FFFFFF',
+        id: `background-color-${commentNumber}`
+      },
+      labelProps: {
+        textContent: `Background Color For Comment ${commentNumber}`
+      }
     }, {
       input: this.handleBackgroundColorHexChange
     }))
     this.appendChild(new InputArea({
-      type: 'color',
-      name: 'textColorHex',
-      textContent: `Text Color For Comment ${commentNumber}`,
-      value: '#000000',
-      id: `text-color-${commentNumber}`
+      inputProps: {
+        type: 'color',
+        name: 'textColorHex',
+        value: '#000000',
+        id: `text-color-${commentNumber}`
+      },
+      labelProps: {
+        textContent: `Text Color For Comment ${commentNumber}`
+      }
     }, {
       input: this.handleTextColorHexChange
     }))
