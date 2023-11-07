@@ -14,3 +14,5 @@ export function getInputByNameAttribute (element: Element, name: string): HTMLIn
 }
 
 export type eventCallback = (event: Event) => void
+
+export function nameOf<T> (key: keyof T): string { return key.toString() }

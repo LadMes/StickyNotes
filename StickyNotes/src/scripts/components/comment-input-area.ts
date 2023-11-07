@@ -1,5 +1,6 @@
 ﻿import InputArea from './input-area'
 import Comment from '../models/comment'
+import { nameOf } from '../helpers'
 
 const elementName = 'comment-input-area'
 
@@ -16,7 +17,7 @@ export default class CommentInputArea extends HTMLDivElement {
     this.appendChild(new InputArea({
       inputProps: {
         type: 'text',
-        name: 'text',
+        name: nameOf<Comment>('text'),
         id: `comment-${commentNumber}`
       },
       labelProps: {
@@ -28,7 +29,7 @@ export default class CommentInputArea extends HTMLDivElement {
     this.appendChild(new InputArea({
       inputProps: {
         type: 'color',
-        name: 'backgroundColorHex',
+        name: nameOf<Comment>('backgroundColorHex'),
         value: '#FFFFFF',
         id: `background-color-${commentNumber}`
       },
@@ -41,7 +42,7 @@ export default class CommentInputArea extends HTMLDivElement {
     this.appendChild(new InputArea({
       inputProps: {
         type: 'color',
-        name: 'textColorHex',
+        name: nameOf<Comment>('textColorHex'),
         value: '#000000',
         id: `text-color-${commentNumber}`
       },

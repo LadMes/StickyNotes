@@ -1,9 +1,10 @@
 ﻿import InputArea from './input-area'
 import { createStickyNote } from '../api-calls'
-import { getInputByNameAttribute, getValueFromInput, stopPropagation } from '../helpers'
+import { getInputByNameAttribute, getValueFromInput, nameOf, stopPropagation } from '../helpers'
 import CommentInputArea from './comment-input-area'
 import DialogMenuButton from './dialog-button'
 import { StickyNote } from '../models/sticky-note'
+import type Dot from '../models/dot'
 
 const elementNames = {
   DialogMenu: 'dialog-menu',
@@ -101,8 +102,8 @@ export class NewStickyNoteDialog extends DialogMenu {
     this.appendChild(new InputArea({
       inputProps: {
         type: 'color',
-        name: 'colorHex',
-        id: 'colorHex',
+        name: nameOf<Dot>('colorHex'),
+        id: 'color-hex',
         value: this.stickyNote.dot.colorHex
       },
       labelProps: {
@@ -114,7 +115,7 @@ export class NewStickyNoteDialog extends DialogMenu {
     this.appendChild(new InputArea({
       inputProps: {
         type: 'text',
-        name: 'radius',
+        name: nameOf<Dot>('radius'),
         id: 'radius'
       },
       labelProps: {
@@ -134,7 +135,7 @@ export class NewStickyNoteDialog extends DialogMenu {
   }
 
   private handleRadiusChange (event: Event): void {
-    const radiusInput = getInputByNameAttribute(this, 'radius')
+    const radiusInput = getInputByNameAttribute(this, nameOf<Dot>('radius'))
     const value = parseInt(getValueFromInput(radiusInput))
     if (isNaN(value) || value <= 0 || value > 100) {
       radiusInput?.classList.add('input-error')
