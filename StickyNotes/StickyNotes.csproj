@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\close_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="src\index.html" />
     <None Remove="src\styles\comment.css" />
     <None Remove="src\styles\main.css" />
@@ -67,7 +71,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Include="wwwroot\close_icon.png" />
   </ItemGroup>
 
 </Project>
