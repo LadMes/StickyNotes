@@ -68,12 +68,15 @@ export default class CommentInputArea extends HTMLDivElement {
 
     const input = textInputArea.querySelector<HTMLInputElement>('input')
     if (input !== null) {
-      this.validator.addErrorCondition(input, 'Comment can\'t be empty', () => {
-        if (input.value === '') {
-          return true
-        }
+      this.validator.addErrorCondition(input, {
+        errorMessage: 'Comment can\'t be empty',
+        errorCondition: () => {
+          if (input.value === '') {
+            return true
+          }
 
-        return false
+          return false
+        }
       })
     }
 

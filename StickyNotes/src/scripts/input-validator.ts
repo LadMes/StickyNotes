@@ -1,4 +1,6 @@
-﻿export default class InputValidator {
+﻿import { type InputErrorProps } from './additional-types'
+
+export default class InputValidator {
   private readonly validations: Map<HTMLInputElement, ValidationProps>
 
   constructor () {
@@ -26,15 +28,15 @@
     for (const KVP of this.validations) {
       const validationProps = KVP[1]
       if (!validationProps.isValid) {
-        result.push(validationProps.errorMessage)
+        result.push(validationProps.errorProps.errorMessage)
       }
     }
 
     return result
   }
 
-  addErrorCondition (input: HTMLInputElement, errorMessage: string, errorCondition: ConditionDelegate): void {
-    this.validations.set(input, { errorCondition, errorMessage, isValid: false })
+  addErrorCondition (input: HTMLInputElement, errorProps: InputErrorProps): void {
+    this.validations.set(input, { errorProps, isValid: false })
     input.addEventListener('input', this.handleInputValidation)
     input.addEventListener('focusout', this.handleInputValidation)
   }
@@ -51,7 +53,7 @@
     if (event.target instanceof HTMLInputElement) {
       const validationProps = this.validations.get(event.target)
       if (validationProps !== undefined) {
-        if (validationProps.errorCondition()) {
+        if (validationProps.errorProps.errorCondition()) {
           event.target.classList.add('input-error')
           validationProps.isValid = false
         } else {
@@ -63,10 +65,7 @@
   }
 }
 
-type ConditionDelegate = () => boolean
-
 interface ValidationProps {
-  errorCondition: ConditionDelegate
+  errorProps: InputErrorProps
   isValid: boolean
-  errorMessage: string
 }

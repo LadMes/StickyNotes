@@ -13,6 +13,4 @@ export function getInputByNameAttribute (element: Element, name: string): HTMLIn
   return element.querySelector<HTMLInputElement>(`input[name=${name}]`)
 }
 
-export type eventCallback = (event: Event) => void
-
 export function nameOf<T> (key: keyof T): string { return key.toString() }

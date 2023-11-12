@@ -51,12 +51,15 @@ export default class DotInputArea extends HTMLDivElement {
 
     const input = radiusInputArea.querySelector<HTMLInputElement>('input')
     if (input !== null) {
-      this.validator.addErrorCondition(input, 'Radius must be in the range from 10 to 100', () => {
-        const value = parseInt(getValueFromInput(input))
-        if (isNaN(value) || value < 5 || value > 100) {
-          return true
+      this.validator.addErrorCondition(input, {
+        errorMessage: 'Radius must be in the range from 10 to 100',
+        errorCondition: () => {
+          const value = parseInt(getValueFromInput(input))
+          if (isNaN(value) || value < 5 || value > 100) {
+            return true
+          }
+          return false
         }
-        return false
       })
     }
 
