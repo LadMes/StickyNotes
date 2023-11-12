@@ -1,10 +1,10 @@
-﻿import InputArea from './input-area'
-import { createStickyNote } from '../api-calls'
-import { getInputByNameAttribute, getValueFromInput, nameOf, stopPropagation } from '../helpers'
+﻿import { createStickyNote } from '../api-calls'
+import { stopPropagation } from '../helpers'
 import CommentInputArea from './comment-input-area'
 import DialogMenuButton from './dialog-button'
 import { StickyNote } from '../models/sticky-note'
-import type Dot from '../models/dot'
+import DotInputArea from './dot-input-area'
+import InputValidator from '../input-validator'
 
 const elementNames = {
   DialogMenu: 'dialog-menu',
@@ -83,68 +83,31 @@ class DialogMenu extends HTMLElement {
   }
 }
 
-// TO-DO: Try composition instead of inheritance
+// TODO: Try composition instead of inheritance
 export class NewStickyNoteDialog extends DialogMenu {
   private readonly stickyNote: StickyNote
-  private isModelValid: boolean = false
+  private readonly validotor: InputValidator
+  // private isModelValid: boolean = false
 
   constructor (dotX: number, dotY: number) {
     super()
-    this.handleRadiusChange = this.handleRadiusChange.bind(this)
-    this.handleColorHexChange = this.handleColorHexChange.bind(this)
+    this.validotor = new InputValidator()
+    this.stickyNote = new StickyNote()
     this.submitStickyNote = this.submitStickyNote.bind(this)
     this.addCommentInputArea = this.addCommentInputArea.bind(this)
     this.deleteCommentInputArea = this.deleteCommentInputArea.bind(this)
-    this.stickyNote = new StickyNote()
-    this.stickyNote.dot.x = dotX
-    this.stickyNote.dot.y = dotY
+
     this.classList.add('dialog-menu-new-sticky-note')
-    this.appendChild(new InputArea({
-      inputProps: {
-        type: 'color',
-        name: nameOf<Dot>('colorHex'),
-        id: 'color-hex',
-        value: this.stickyNote.dot.colorHex
-      },
-      labelProps: {
-        textContent: 'Select Color'
-      }
-    }, {
-      input: this.handleColorHexChange
-    }))
-    this.appendChild(new InputArea({
-      inputProps: {
-        type: 'text',
-        name: nameOf<Dot>('radius'),
-        id: 'radius'
-      },
-      labelProps: {
-        textContent: 'Enter radius'
-      }
-    }, {
-      input: this.handleRadiusChange
-    }))
+    this.appendChild(this.createDotInputArea(dotX, dotY))
     this.appendChild(this.createCommentInputAreaContainer())
     this.appendChild(this.createButtonContainer())
   }
 
-  private handleColorHexChange (event: Event): void {
-    if (event.target instanceof HTMLInputElement) {
-      this.stickyNote.dot.colorHex = event.target.value
-    }
-  }
+  private createDotInputArea (dotX: number, dotY: number): DotInputArea {
+    const dotInputArea = new DotInputArea(dotX, dotY, this.validotor)
+    this.stickyNote.dot = dotInputArea.dot
 
-  private handleRadiusChange (event: Event): void {
-    const radiusInput = getInputByNameAttribute(this, nameOf<Dot>('radius'))
-    const value = parseInt(getValueFromInput(radiusInput))
-    if (isNaN(value) || value <= 0 || value > 100) {
-      radiusInput?.classList.add('input-error')
-      this.isModelValid = false
-    } else {
-      this.stickyNote.dot.radius = value
-      radiusInput?.classList.remove('input-error')
-      this.isModelValid = true
-    }
+    return dotInputArea
   }
 
   private createCommentInputAreaContainer (): HTMLDivElement {
@@ -186,7 +149,7 @@ export class NewStickyNoteDialog extends DialogMenu {
 
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
-    if (this.isModelValid) {
+    if (this.validotor.validate()) {
       this.remove()
       createStickyNote(this.stickyNote)
     }
@@ -196,7 +159,7 @@ export class NewStickyNoteDialog extends DialogMenu {
     event.stopPropagation()
     const container = this.querySelector<HTMLDivElement>('#comment-input-area-container')
     const commentNumber = this.getCommentInputAreas().length + 1
-    const newCommentInputArea = new CommentInputArea(commentNumber)
+    const newCommentInputArea = new CommentInputArea(commentNumber, this.validotor)
 
     this.stickyNote.comments.push(newCommentInputArea.comment)
     container?.appendChild(newCommentInputArea)
