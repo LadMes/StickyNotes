@@ -21,6 +21,18 @@
     return true
   }
 
+  getAllErrorMessages (): string[] {
+    const result: string[] = []
+    for (const KVP of this.validations) {
+      const validationProps = KVP[1]
+      if (!validationProps.isValid) {
+        result.push(validationProps.errorMessage)
+      }
+    }
+
+    return result
+  }
+
   addErrorCondition (input: HTMLInputElement, errorMessage: string, errorCondition: ConditionDelegate): void {
     this.validations.set(input, { errorCondition, errorMessage, isValid: false })
     input.addEventListener('input', this.handleInputValidation)
