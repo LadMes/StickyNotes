@@ -70,8 +70,4 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\close_icon.png" />
-  </ItemGroup>
-
 </Project>

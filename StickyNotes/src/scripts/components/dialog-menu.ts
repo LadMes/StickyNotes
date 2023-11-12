@@ -87,7 +87,6 @@ class DialogMenu extends HTMLElement {
 export class NewStickyNoteDialog extends DialogMenu {
   private readonly stickyNote: StickyNote
   private readonly validotor: InputValidator
-  // private isModelValid: boolean = false
 
   constructor (dotX: number, dotY: number) {
     super()
