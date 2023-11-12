@@ -30,9 +30,10 @@ export default class CommentInputArea extends HTMLDivElement {
       },
       labelProps: {
         textContent: `Background Color For Comment ${commentNumber}`
+      },
+      inputEvents: {
+        input: this.handleBackgroundColorHexChange
       }
-    }, {
-      input: this.handleBackgroundColorHexChange
     }))
     this.appendChild(new InputArea({
       inputProps: {
@@ -43,9 +44,10 @@ export default class CommentInputArea extends HTMLDivElement {
       },
       labelProps: {
         textContent: `Text Color For Comment ${commentNumber}`
+      },
+      inputEvents: {
+        input: this.handleTextColorHexChange
       }
-    }, {
-      input: this.handleTextColorHexChange
     }))
   }
 
@@ -58,9 +60,10 @@ export default class CommentInputArea extends HTMLDivElement {
       },
       labelProps: {
         textContent: `Comment ${this.commentNumber}`
+      },
+      inputEvents: {
+        input: this.handleTextChange
       }
-    }, {
-      input: this.handleTextChange
     })
 
     const input = textInputArea.querySelector<HTMLInputElement>('input')

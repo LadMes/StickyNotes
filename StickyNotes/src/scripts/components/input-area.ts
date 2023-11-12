@@ -4,15 +4,11 @@ const elementName = 'input-area'
 
 export default class InputArea extends HTMLDivElement {
   private readonly props: InputAreaProps
-  private readonly inputEvents: Record<string, eventCallback>
 
-  constructor (props: InputAreaProps, inputEvents?: Record<string, eventCallback>) {
+  constructor (props: InputAreaProps) {
     super()
     this.setAttribute('is', elementName)
     this.props = props
-    if (inputEvents !== undefined) {
-      this.inputEvents = inputEvents
-    }
     this.appendChild(this.createLabel())
     this.appendChild(this.createInput())
   }
@@ -20,15 +16,15 @@ export default class InputArea extends HTMLDivElement {
   connectedCallback (): void {
     this.addEventListener('mousedown', stopPropagation)
     const input = this.querySelector<HTMLInputElement>('input')
-    for (const event in this.inputEvents) {
-      input?.addEventListener(event, this.inputEvents[event])
+    for (const event in this.props.inputEvents) {
+      input?.addEventListener(event, this.props.inputEvents[event])
     }
   }
 
   disconnectedCallback (): void {
     this.removeEventListener('mousedown', stopPropagation)
-    for (const event in this.inputEvents) {
-      this.removeEventListener(event, this.inputEvents[event])
+    for (const event in this.props.inputEvents) {
+      this.removeEventListener(event, this.props.inputEvents[event])
     }
   }
 
@@ -51,6 +47,7 @@ export default class InputArea extends HTMLDivElement {
 interface InputAreaProps {
   inputProps: InputProps
   labelProps: LabelProps
+  inputEvents?: Record<string, eventCallback>
 }
 
 interface InputProps {

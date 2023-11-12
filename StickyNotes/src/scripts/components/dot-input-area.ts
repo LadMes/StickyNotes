@@ -26,9 +26,10 @@ export default class DotInputArea extends HTMLDivElement {
       },
       labelProps: {
         textContent: 'Select Color'
+      },
+      inputEvents: {
+        input: this.handleColorHexChange
       }
-    }, {
-      input: this.handleColorHexChange
     }))
     this.appendChild(this.createRadiusInputArea())
   }
@@ -42,9 +43,10 @@ export default class DotInputArea extends HTMLDivElement {
       },
       labelProps: {
         textContent: 'Enter radius'
+      },
+      inputEvents: {
+        input: this.handleRadiusChange
       }
-    }, {
-      input: this.handleRadiusChange
     })
 
     const input = radiusInputArea.querySelector<HTMLInputElement>('input')
