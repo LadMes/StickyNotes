@@ -8,13 +8,12 @@ const elementName = 'dot-input-area'
 // TODO: This requires refactoring
 export default class DotInputArea extends HTMLDivElement {
   dot: Dot
-  private readonly validator: InputValidator
+
   constructor (x: number, y: number, validator: InputValidator) {
     super()
     this.dot = new Dot()
     this.dot.x = x
     this.dot.y = y
-    this.validator = validator
     this.handleRadiusChange = this.handleRadiusChange.bind(this)
     this.handleColorHexChange = this.handleColorHexChange.bind(this)
     this.append(new InputArea({
@@ -31,10 +30,10 @@ export default class DotInputArea extends HTMLDivElement {
         input: this.handleColorHexChange
       }
     }))
-    this.appendChild(this.createRadiusInputArea())
+    this.appendChild(this.createRadiusInputArea(validator))
   }
 
-  private createRadiusInputArea (): InputArea {
+  private createRadiusInputArea (validator: InputValidator): InputArea {
     const radiusInputArea = new InputArea({
       inputProps: {
         type: 'text',
@@ -46,22 +45,18 @@ export default class DotInputArea extends HTMLDivElement {
       },
       inputEvents: {
         input: this.handleRadiusChange
-      }
-    })
-
-    const input = radiusInputArea.querySelector<HTMLInputElement>('input')
-    if (input !== null) {
-      this.validator.addErrorCondition(input, {
+      },
+      errorProps: {
         errorMessage: 'Radius must be in the range from 10 to 100',
-        errorCondition: () => {
-          const value = parseInt(getValueFromInput(input))
-          if (isNaN(value) || value < 5 || value > 100) {
+        errorCondition: (value: string) => {
+          const number = parseInt(value)
+          if (isNaN(number) || number < 5 || number > 100) {
             return true
           }
           return false
         }
-      })
-    }
+      }
+    }, validator)
 
     return radiusInputArea
   }

@@ -90,7 +90,7 @@ export class NewStickyNoteDialog extends DialogMenu {
 
   constructor (dotX: number, dotY: number) {
     super()
-    this.validotor = new InputValidator()
+    this.validotor = new InputValidator(['input-error'])
     this.stickyNote = new StickyNote()
     this.submitStickyNote = this.submitStickyNote.bind(this)
     this.addCommentInputArea = this.addCommentInputArea.bind(this)

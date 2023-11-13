@@ -2,8 +2,10 @@
 
 export default class InputValidator {
   private readonly validations: Map<HTMLInputElement, ValidationProps>
+  private readonly errorCSSClasses: string[]
 
-  constructor () {
+  constructor (errorCSSClasses: string[]) {
+    this.errorCSSClasses = errorCSSClasses
     this.validations = new Map<HTMLInputElement, ValidationProps>()
     this.handleInputValidation = this.handleInputValidation.bind(this)
   }
@@ -35,8 +37,8 @@ export default class InputValidator {
     return result
   }
 
-  addErrorCondition (input: HTMLInputElement, errorProps: InputErrorProps): void {
-    this.validations.set(input, { errorProps, isValid: false })
+  addErrorCondition (input: HTMLInputElement, errorHolder: Element, errorProps: InputErrorProps): void {
+    this.validations.set(input, { errorProps, isValid: false, errorHolder })
     input.addEventListener('input', this.handleInputValidation)
     input.addEventListener('focusout', this.handleInputValidation)
   }
@@ -53,11 +55,13 @@ export default class InputValidator {
     if (event.target instanceof HTMLInputElement) {
       const validationProps = this.validations.get(event.target)
       if (validationProps !== undefined) {
-        if (validationProps.errorProps.errorCondition()) {
-          event.target.classList.add('input-error')
+        if (validationProps.errorProps.errorCondition(event.target.value)) {
+          event.target.classList.add(...this.errorCSSClasses)
+          validationProps.errorHolder.textContent = validationProps.errorProps.errorMessage
           validationProps.isValid = false
         } else {
-          event.target.classList.remove('input-error')
+          event.target.classList.remove(...this.errorCSSClasses)
+          validationProps.errorHolder.textContent = ''
           validationProps.isValid = true
         }
       }
@@ -68,4 +72,5 @@ export default class InputValidator {
 interface ValidationProps {
   errorProps: InputErrorProps
   isValid: boolean
+  errorHolder: Element
 }

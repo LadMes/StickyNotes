@@ -9,18 +9,16 @@ const elementName = 'comment-input-area'
 export default class CommentInputArea extends HTMLDivElement {
   comment: Comment
   private readonly commentNumber: number
-  private readonly validator: InputValidator
 
   constructor (commentNumber: number, validator: InputValidator) {
     super()
     this.comment = new Comment()
     this.commentNumber = commentNumber
-    this.validator = validator
     this.handleTextChange = this.handleTextChange.bind(this)
     this.handleBackgroundColorHexChange = this.handleBackgroundColorHexChange.bind(this)
     this.handleTextColorHexChange = this.handleTextColorHexChange.bind(this)
     this.setAttribute('is', elementName)
-    this.appendChild(this.createTextInputArea())
+    this.appendChild(this.createTextInputArea(validator))
     this.appendChild(new InputArea({
       inputProps: {
         type: 'color',
@@ -51,7 +49,7 @@ export default class CommentInputArea extends HTMLDivElement {
     }))
   }
 
-  private createTextInputArea (): InputArea {
+  private createTextInputArea (validator: InputValidator): InputArea {
     const textInputArea = new InputArea({
       inputProps: {
         type: 'text',
@@ -63,22 +61,18 @@ export default class CommentInputArea extends HTMLDivElement {
       },
       inputEvents: {
         input: this.handleTextChange
-      }
-    })
-
-    const input = textInputArea.querySelector<HTMLInputElement>('input')
-    if (input !== null) {
-      this.validator.addErrorCondition(input, {
+      },
+      errorProps: {
         errorMessage: 'Comment can\'t be empty',
-        errorCondition: () => {
-          if (input.value === '') {
+        errorCondition: (value: string) => {
+          if (value === '') {
             return true
           }
 
           return false
         }
-      })
-    }
+      }
+    }, validator)
 
     return textInputArea
   }
