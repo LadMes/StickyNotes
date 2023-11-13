@@ -168,6 +168,7 @@ export class NewStickyNoteDialog extends DialogMenu {
     event.stopPropagation()
     const lastCommentInput = Array.from(this.getCommentInputAreas()).pop()
     lastCommentInput?.remove()
+    this.stickyNote.comments.pop()
   }
 
   private getCommentInputAreas (): NodeListOf<CommentInputArea> {
