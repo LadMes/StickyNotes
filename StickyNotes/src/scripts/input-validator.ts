@@ -37,6 +37,17 @@ export default class InputValidator {
     return result
   }
 
+  showErrorMessages (): void {
+    const focusout = new Event('focusout', { bubbles: false })
+    for (const KVP of this.validations) {
+      const input = KVP[0]
+      const validationProps = KVP[1]
+      if (!validationProps.isValid) {
+        input.dispatchEvent(focusout)
+      }
+    }
+  }
+
   addErrorCondition (input: HTMLInputElement, errorHolder: Element, errorProps: InputErrorProps): void {
     this.validations.set(input, { errorProps, isValid: false, errorHolder })
     input.addEventListener('input', this.handleInputValidation)

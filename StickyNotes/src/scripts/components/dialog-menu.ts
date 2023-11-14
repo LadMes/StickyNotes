@@ -151,6 +151,8 @@ export class NewStickyNoteDialog extends DialogMenu {
     if (this.validotor.validate()) {
       this.remove()
       createStickyNote(this.stickyNote)
+    } else {
+      this.validotor.showErrorMessages()
     }
   }
 
