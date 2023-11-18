@@ -27,7 +27,7 @@ export default class CommentInputArea extends HTMLDivElement {
         id: `background-color-${commentNumber}`
       },
       labelProps: {
-        textContent: `Background Color For Comment ${commentNumber}`
+        textContent: `Background color for Comment ${commentNumber}`
       },
       inputEvents: {
         input: this.handleBackgroundColorHexChange
@@ -41,7 +41,7 @@ export default class CommentInputArea extends HTMLDivElement {
         id: `text-color-${commentNumber}`
       },
       labelProps: {
-        textContent: `Text Color For Comment ${commentNumber}`
+        textContent: `Text color for Comment ${commentNumber}`
       },
       inputEvents: {
         input: this.handleTextColorHexChange

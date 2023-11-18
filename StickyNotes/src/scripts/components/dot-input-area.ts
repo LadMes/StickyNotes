@@ -41,7 +41,7 @@ export default class DotInputArea extends HTMLDivElement {
         id: 'radius'
       },
       labelProps: {
-        textContent: 'Enter radius'
+        textContent: 'Enter Radius'
       },
       inputEvents: {
         input: this.handleRadiusChange
