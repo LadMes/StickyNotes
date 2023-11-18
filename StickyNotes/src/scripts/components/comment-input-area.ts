@@ -74,6 +74,8 @@ export default class CommentInputArea extends HTMLDivElement {
       }
     }, validator)
 
+    textInputArea.querySelector('input')?.classList.add('input-text')
+
     return textInputArea
   }
 

@@ -58,6 +58,8 @@ export default class DotInputArea extends HTMLDivElement {
       }
     }, validator)
 
+    radiusInputArea.querySelector('input')?.classList.add('input-text')
+
     return radiusInputArea
   }
 

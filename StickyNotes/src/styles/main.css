@@ -1,8 +1,10 @@
 ﻿@import 'comment.css';
 @import 'dialog.css';
+@import 'fonts.css';
+@import 'inputs.css';
 
 :root {
-    font-family: Calibri;
+    font-family: 'Quicksand-Regular';
     font-size: 12pt;
 }
 
