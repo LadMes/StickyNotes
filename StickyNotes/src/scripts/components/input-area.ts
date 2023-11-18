@@ -4,7 +4,7 @@ import type InputValidator from '../input-validator'
 
 const elementName = 'input-area'
 
-export default class InputArea extends HTMLDivElement {
+export default class InputArea extends HTMLElement {
   private readonly props: InputAreaProps
   private readonly validator: InputValidator
   private readonly label: HTMLLabelElement
@@ -13,7 +13,6 @@ export default class InputArea extends HTMLDivElement {
 
   constructor (props: InputAreaProps, validator?: InputValidator) {
     super()
-    this.setAttribute('is', elementName)
     this.props = props
     if (validator !== undefined) {
       this.validator = validator
@@ -89,4 +88,4 @@ interface LabelProps {
   textContent: HTMLLabelElement['textContent']
 }
 
-customElements.define(elementName, InputArea, { extends: 'div' })
+customElements.define(elementName, InputArea)
