@@ -1,4 +1,4 @@
-﻿.dialog-menu {
+﻿.dialog {
     position: absolute;
     border: 1px solid #808080;
     display: flex;
@@ -9,7 +9,7 @@
 }
 
 
-.dialog-menu-new-sticky-note {
+.dialog-new-sticky-note {
     width: 400px;
     height: 500px;
     background-color: antiquewhite

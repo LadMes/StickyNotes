@@ -19,7 +19,7 @@ class DialogMenu extends HTMLElement {
   constructor () {
     super()
     this.removeDialogMenu = this.removeDialogMenu.bind(this)
-    this.classList.add('dialog-menu')
+    this.classList.add('dialog')
     this.appendChild(this.createCloseIcon())
   }
 
@@ -96,7 +96,7 @@ export class NewStickyNoteDialog extends DialogMenu {
     this.addCommentInputArea = this.addCommentInputArea.bind(this)
     this.deleteCommentInputArea = this.deleteCommentInputArea.bind(this)
 
-    this.classList.add('dialog-menu-new-sticky-note')
+    this.classList.add('dialog-new-sticky-note')
     this.appendChild(this.createDotInputArea(dotX, dotY))
     this.appendChild(this.createCommentInputAreaContainer())
     this.appendChild(this.createButtonContainer())

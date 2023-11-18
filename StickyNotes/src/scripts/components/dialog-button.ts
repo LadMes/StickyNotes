@@ -1,6 +1,6 @@
 ﻿import { type EventCallback } from '../additional-types'
 
-const elementName = 'dialog-menu-button'
+const elementName = 'dialog-button'
 
 export default class DialogMenuButton extends HTMLButtonElement {
   buttonEvents: Record<string, EventCallback>
