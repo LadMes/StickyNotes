@@ -26,3 +26,7 @@ export function showStickyNotes (stickyNotes: StickyNote[]): void {
     showStickyNote(stickyNote)
   }
 }
+
+export function removeStickyNote (stickyNoteElement: StickyNoteElement): void {
+  stickyNoteElement.unmount()
+}

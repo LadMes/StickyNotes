@@ -1,6 +1,6 @@
 ﻿import type StickyNoteElement from './models/sticky-note'
 import { type StickyNote } from './models/sticky-note'
-import { showStickyNote, showStickyNotes } from './sticky-notes-stage'
+import { removeStickyNote, showStickyNote, showStickyNotes } from './sticky-notes-stage'
 
 const apiURL = 'api/StickyNotes'
 
@@ -35,7 +35,7 @@ export function deleteStickyNote (stickyNoteElement: StickyNoteElement): void {
   fetch(`${apiURL}/${stickyNoteElement.id}`, {
     method: 'DELETE'
   }).then(() => {
-    stickyNoteElement.unmount()
+    removeStickyNote(stickyNoteElement)
   }).catch((err) => {
     console.log(err)
   })
