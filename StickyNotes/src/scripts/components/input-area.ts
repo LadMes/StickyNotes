@@ -7,9 +7,9 @@ const elementName = 'input-area'
 export default class InputArea extends HTMLElement {
   private readonly props: InputAreaProps
   private readonly validator: InputValidator
-  private readonly label: HTMLLabelElement
-  private readonly input: HTMLInputElement
-  private readonly span: HTMLSpanElement
+  private label: HTMLLabelElement
+  private input: HTMLInputElement
+  private span: HTMLSpanElement
 
   constructor (props: InputAreaProps, validator?: InputValidator) {
     super()
@@ -17,9 +17,8 @@ export default class InputArea extends HTMLElement {
     if (validator !== undefined) {
       this.validator = validator
     }
-    this.label = this.appendChild(this.createLabel())
-    this.input = this.appendChild(this.createInput())
-    this.span = this.appendChild(this.createErrorSpan())
+    this.appendChild(this.createMainBlock())
+    this.appendChild(this.createErrorBlock())
   }
 
   connectedCallback (): void {
@@ -45,6 +44,23 @@ export default class InputArea extends HTMLElement {
     if (this.props.errorProps !== undefined) {
       this.validator.removeErrorCondition(this.input)
     }
+  }
+
+  private createMainBlock (): HTMLDivElement {
+    const div = document.createElement('div')
+    div.classList.add('input-area-main-block')
+    this.label = div.appendChild(this.createLabel())
+    this.input = div.appendChild(this.createInput())
+
+    return div
+  }
+
+  private createErrorBlock (): HTMLDivElement {
+    const div = document.createElement('div')
+    div.classList.add('input-area-error-block')
+    this.span = div.appendChild(this.createErrorSpan())
+
+    return div
   }
 
   private createInput (): HTMLInputElement {
