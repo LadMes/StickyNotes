@@ -1,4 +1,20 @@
-﻿input {
+﻿input-area {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0;
+    align-content: space-around;
+}
+
+.input-area-main-block {
+    display: flex;
+    align-items: center;
+}
+
+.input-area-error-block {
+    margin-top: 0.5rem;
+}
+
+input {
     margin: 0 0 0 0.5rem;
 }
 
@@ -6,16 +22,19 @@
     height: 2rem;
     border-radius: 1rem;
     border: none;
+    padding-left: 0.5rem;
+}
+
+.input-text:focus {
+    outline: solid #94d2bd;
 }
 
 .input-error {
     border: 2px solid #ae2012;
 }
 
-input-area {
-    display: flex;
-    align-items: center;
-    margin: 0.5rem 0;
+.input-error:focus {
+    outline: solid #ae2012;
 }
 
 input[type=color] {
@@ -27,12 +46,16 @@ input[type=color] {
     cursor: pointer;
 }
 
-    input[type=color]::-webkit-color-swatch {
-        border-radius: 50%;
-        border: 2px solid #fff;
-    }
+input[type=color]::-webkit-color-swatch {
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
 
-    input[type=color]::-moz-color-swatch {
-        border-radius: 50%;
-        border: 2px solid #fff;
-    }
+input[type=color]::-moz-color-swatch {
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.error-message {
+    color: #9b2226;
+}
