@@ -12,7 +12,7 @@ stage.add(new Konva.Layer())
 
 stage.addEventListener('click', (e: PointerEvent) => {
   if (e.button === 0 && document.getElementsByClassName('dialog').length === 0) {
-    document.body.append(new NewStickyNoteDialog(e.pageX, e.pageY))
+    document.body.append(new NewStickyNoteDialog('Create Sticky Note', e.pageX, e.pageY))
   }
 })
 

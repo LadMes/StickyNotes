@@ -16,11 +16,12 @@ class DialogMenu extends HTMLElement {
   private currentX: number
   private currentY: number
 
-  constructor () {
+  constructor (title: string) {
     super()
+
     this.removeDialogMenu = this.removeDialogMenu.bind(this)
     this.classList.add('dialog')
-    this.appendChild(this.createCloseIcon())
+    this.appendChild(this.createHeader(title))
   }
 
   connectedCallback (): void {
@@ -36,6 +37,18 @@ class DialogMenu extends HTMLElement {
     this.removeEventListener('mousedown', this.mousedown)
     this.removeEventListener('mousemove', this.mousemove)
     this.removeEventListener('mouseup', this.mouseup)
+  }
+
+  private createHeader (title: string): HTMLDivElement {
+    const header = document.createElement('div')
+    header.classList.add('dialog-header')
+    const h2 = document.createElement('h2')
+    h2.innerText = title
+
+    header.appendChild(h2)
+    header.appendChild(this.createCloseIcon())
+
+    return header
   }
 
   private calculateCoordInPx (windowSideSize: number, dialogSideSize: number): string {
@@ -88,8 +101,8 @@ export class NewStickyNoteDialog extends DialogMenu {
   private readonly stickyNote: StickyNote
   private readonly validotor: InputValidator
 
-  constructor (dotX: number, dotY: number) {
-    super()
+  constructor (title: string, dotX: number, dotY: number) {
+    super(title)
     this.validotor = new InputValidator(['input-error'])
     this.stickyNote = new StickyNote()
     this.submitStickyNote = this.submitStickyNote.bind(this)

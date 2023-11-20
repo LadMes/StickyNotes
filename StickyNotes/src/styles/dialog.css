@@ -8,6 +8,13 @@
     padding: 1rem;
 }
 
+.dialog-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
 
 .dialog-new-sticky-note {
     width: 400px;
@@ -20,9 +27,7 @@
 .close-icon {
     width: 32px;
     height: 32px;
-    align-self: flex-end;
-    margin-top: 0.3rem;
-    margin-right: 0.5rem;
+    align-self: start;
     filter: invert(19%) sepia(62%) saturate(2922%) hue-rotate(353deg) brightness(99%) contrast(94%);
 }
 
