@@ -99,11 +99,11 @@ class DialogMenu extends HTMLElement {
 // TODO: Try composition instead of inheritance
 export class NewStickyNoteDialog extends DialogMenu {
   private readonly stickyNote: StickyNote
-  private readonly validotor: InputValidator
+  private readonly validator: InputValidator
 
   constructor (title: string, dotX: number, dotY: number) {
     super(title)
-    this.validotor = new InputValidator(['input-error'])
+    this.validator = new InputValidator(['input-error'])
     this.stickyNote = new StickyNote()
     this.submitStickyNote = this.submitStickyNote.bind(this)
     this.addCommentInputArea = this.addCommentInputArea.bind(this)
@@ -116,7 +116,7 @@ export class NewStickyNoteDialog extends DialogMenu {
   }
 
   private createDotInputArea (dotX: number, dotY: number): DotInputArea {
-    const dotInputArea = new DotInputArea(dotX, dotY, this.validotor)
+    const dotInputArea = new DotInputArea(dotX, dotY, this.validator)
     this.stickyNote.dot = dotInputArea.dot
 
     return dotInputArea
@@ -161,11 +161,11 @@ export class NewStickyNoteDialog extends DialogMenu {
 
   private submitStickyNote (event: Event): void {
     event.stopPropagation()
-    if (this.validotor.validate()) {
+    if (this.validator.validate()) {
       this.remove()
       createStickyNote(this.stickyNote)
     } else {
-      this.validotor.showErrorMessages()
+      this.validator.showErrorMessages()
     }
   }
 
@@ -173,7 +173,7 @@ export class NewStickyNoteDialog extends DialogMenu {
     event.stopPropagation()
     const container = this.querySelector<HTMLDivElement>('#comment-input-area-container')
     const commentNumber = this.getCommentInputAreas().length + 1
-    const newCommentInputArea = new CommentInputArea(commentNumber, this.validotor)
+    const newCommentInputArea = new CommentInputArea(commentNumber, this.validator)
 
     this.stickyNote.comments.push(newCommentInputArea.comment)
     container?.appendChild(newCommentInputArea)
